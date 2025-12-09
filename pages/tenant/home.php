@@ -53,8 +53,8 @@ include __DIR__ . '/../../Components/header.php';
             <div class="service-location-section">
                 <div class="section-heading">Where Our Rentals Are Available :</div>
                 <div class="slider-wrapper">
-                    <button class="round-button left-button" onclick="scrollToLeft()"><i class="fa-solid fa-angle-left"></i></button>
-                    <button class="round-button right-button" onclick="scrollToRight()"><i class="fa-solid fa-angle-right"></i></button>
+                    <button class="round-button left-button" onclick="scrollToRight()"><i class="fa-solid fa-angle-left"></i></button>
+                    <button class="round-button right-button" onclick="scrollToLeft()"><i class="fa-solid fa-angle-right"></i></button>
 
                     <div class="slider">
                         <?php
