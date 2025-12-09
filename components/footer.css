@@ -1,0 +1,326 @@
+.popup-background{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+.popup-background.active{
+    visibility: visible;
+    opacity: 1;
+}
+.popup-card{
+    min-width: 300px;
+    min-height: 300px;
+    position: fixed;
+    z-index: 2000;
+    top: 20px;
+    right: -500px;
+    background-color: var(--clean-white);
+    padding: 20px;
+    border-radius: 10px;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+}
+.popup-card.active{
+    right: 20px;
+    visibility: visible;
+}
+.popup-card-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-primary);
+    font-size: var(--h3);
+}
+.popup-card-header i,
+.chatbody-header i{
+    height: clamp(17px,2vw,19px);
+    cursor: pointer;
+    margin-left: 5px;
+}
+.popup-card-header i:active{
+    transform: scale(90%);
+}
+
+.popup-card hr{
+    margin: 10px 0;
+}
+#login-popup{
+    min-height: 100px;
+    width: 340px;
+    overflow: hidden;
+}
+#login-popup .popup-card-body{
+    font-family: var(--font-secondary);
+    width: 650px;
+    display: flex;
+    transition: all 0.3s ease;
+    gap: 20px;
+    justify-content: space-between;
+}
+.fa-eye,
+.fa-eye-slash{
+    cursor: pointer;
+}
+.signUp-section,
+.login-section{
+    width: 300px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.signUp-section{
+    display: none;
+}
+#login-popup form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+#login-popup label{
+    font-size: var(--body);
+    font-weight: var(--fw-regular);
+}
+#login-popup span{
+    text-decoration: underline;
+    color: var(--rentora-blue);
+    cursor: pointer;
+}
+.signup-link{
+    display: flex;
+    justify-content: end;
+    padding: 5px;
+}
+.signup-link p{
+    display: flex;
+    gap: 5px;
+}
+#login-popup input[type=number]::-webkit-inner-spin-button,
+#login-popup input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.radio-input{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* massage Popup  */
+#massage-popup{
+    width: 300px;
+    height: 450px;
+    overflow: hidden;
+}
+#massage-popup.full-screen{
+    min-height: 95vh;
+    width: 95vw;
+    right: 2vw;
+    transition: all 0.3s ease;
+}
+#massage-popup li{
+    display: flex;
+    gap: 10px;
+}
+.chatbody-header,
+.chatbody-footer{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 3px 0px 10px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    position: absolute;
+    width: 100%;
+    background-color: var(--clean-white);
+    height: 55px;
+}
+.chatbody-header{
+    top: 0;
+    border-radius: 10px 10px 0 0;
+}
+.chatbody-footer{
+    bottom: 0;
+    justify-content: space-between;
+    border-radius: 0 0 10px 10px;
+}
+
+.popup-card-body{
+    display: flex;
+    align-items: start;
+}
+.card-aside{
+    flex-basis: 280px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: var(--clean-white);
+    height: 100%;
+    padding: 10px;
+}
+.card-aside li{
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+}
+.card-aside li:hover{
+    background-color: var(--soft-gray);
+}
+.card-aside li.active{
+    background-color: rgba(104, 183, 251, 0.2);
+}
+.profile-picture{
+    width: 40px;
+    height: 40px;
+    background-color: antiquewhite;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.profile-picture img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+.name{
+    font-size: body;
+    font-family: var(--font-secondary);
+    font-weight: var(--fw-medium);
+}
+.profile-info{
+    flex-grow: 1;
+}
+.chatbody{
+    border: 10px solid var(--soft-gray);
+    background-color: var(--clean-white);
+    flex: 1 0 300px;
+    min-height: 85vh;
+    position: relative;
+    border-radius: 10px;
+}
+.chatbody li{
+    align-items: start;
+}
+.chatbody ul{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 10px;
+    height: calc(85vh - 75px);
+}
+
+.message{
+    padding: 8px 16px ;
+    border-radius: 10px;
+    background-color: var(--soft-gray);
+    max-width: 80%;
+}
+.send{
+    flex-direction: row-reverse;
+}
+.send .message{
+    background-color: var(--rentora-blue);
+    color: white;
+}
+
+
+/* footer  */
+footer{
+    background-color: #0d1426;
+    border-radius: 30px 30px 0 0;
+    font-family: var(--font-secondary);
+    font-size: var(--small);
+    position: relative;
+    z-index: 2;
+    padding: 40px 50px 5px 50px;
+}
+footer section{
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    color: white;
+    border-bottom: 1.5px solid rgba(133, 132, 132, 0.3);
+    padding-bottom: 10px;
+}
+.social-links{
+    display: flex;
+    gap: 10px;
+}
+footer ul{
+    margin: 10px 0;
+}
+footer .heading{
+    font-weight: 700;
+}
+footer a{
+    color:rgba(255, 255, 255, 0.745);
+    font-size: var(--small);
+    display: flex;
+    width: fit-content;
+    align-items: start;
+    margin-bottom: 3px;
+}
+footer a:hover{
+    color: var(--rentora-blue);
+}
+footer .logo:hover{
+    color: white;
+}
+footer>:last-child{
+    width: 90vw;
+    margin: auto;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color:white;
+}
+footer>:last-child ul{
+    display: flex;
+    gap: 15px;
+}
+.brand-description{
+    color: rgba(255, 255, 255, 0.745);
+    max-width: 85%;
+}
+footer .icon{
+    width: 35px;
+    height: 35px;
+    background-color:  #e3e3e323;
+    color: rgba(255, 255, 255, 0.745);
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    animation: opening 0.7s ease;
+}
+footer .icon:hover{
+    background-color: var(--rentora-blue);
+    color: white;
+}
+
+@media (max-width : 670px){
+    footer>:last-child{
+        flex-direction: column;
+    }
+}
+@media (max-width : 894px){
+    footer section{
+        grid-template-columns: 2fr 1fr;
+    }
+}
+@media (max-width : 585px){
+    footer section{
+        grid-template-columns: 1fr;
+    }
+}
