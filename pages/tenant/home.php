@@ -162,70 +162,70 @@ include __DIR__ . '/../../Components/header.php';
                 </div>
                 <a href="./room-details.php?id=1"><button class="hero-button">View Details</button></a>
             </div>
+            <div class="property-card">
+                <div class="img-holder">
+                    <img src="../../assets/images/demo-room-img.jpg" alt="room-images">
+                    <button class="round-button" onclick="toggleWishlist(this)"><i class="fa-regular fa-heart"></i></button>
+                    <p class="property-type">PG/Hostel</p>
+                </div>
+                <div class="info">
+                    <div class="card-heading">Santra Mess</div>
+                    <div class="rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star"></i>
+                    </div>
+                    <p><i class="fa-solid fa-location-dot"></i> Ramananda Sarani, School Danga, Bankura</p>
+                    <div class="price">₹ 1200 <p>/Month</p></div>
+                    
+                </div>
+                <a href="./room-details.php?id=1"><button class="hero-button">View Details</button></a>
+            </div>
+            <div class="property-card">
+                <div class="img-holder">
+                    <img src="../../assets/images/demo-room-img.jpg" alt="room-images">
+                    <button class="round-button" onclick="toggleWishlist(this)"><i class="fa-regular fa-heart"></i></button>
+                    <p class="property-type">PG/Hostel</p>
+                </div>
+                <div class="info">
+                    <div class="card-heading">Santra Mess</div>
+                    <div class="rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star"></i>
+                    </div>
+                    <p><i class="fa-solid fa-location-dot"></i> Ramananda Sarani, School Danga, Bankura</p>
+                    <div class="price">₹ 1200 <p>/Month</p></div>
+                    
+                </div>
+                <a href="./room-details.php?id=1"><button class="hero-button">View Details</button></a>
+            </div>
+            <div class="property-card">
+                <div class="img-holder">
+                    <img src="../../assets/images/demo-room-img.jpg" alt="room-images">
+                    <button class="round-button" onclick="toggleWishlist(this)"><i class="fa-regular fa-heart"></i></button>
+                    <p class="property-type">PG/Hostel</p>
+                </div>
+                <div class="info">
+                    <div class="card-heading">Santra Mess</div>
+                    <div class="rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star"></i>
+                    </div>
+                    <p><i class="fa-solid fa-location-dot"></i> Ramananda Sarani, School Danga, Bankura</p>
+                    <div class="price">₹ 1200 <p>/Month</p></div>
+                    
+                </div>
+                <a href="./room-details.php?id=1"><button class="hero-button">View Details</button></a>
+            </div>
 
-            <div class="property-card">
-                <div class="img-holder">
-                    <img src="../../assets/images/demo-room-img.jpg" alt="room-images">
-                    <button class="round-button"><i class="fa-regular fa-heart"></i></button>
-                    <p class="property-type">PG/Hostel</p>
-                </div>
-                <div class="info">
-                    <div class="card-heading">Santra Mess</div>
-                    <div class="rating">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </div>
-                    <p><i class="fa-solid fa-location-dot"></i> Ramananda Sarani, School Danga, Bankura</p>
-                    <div class="price">₹ 1200 <p>/Month</p></div>
-                    
-                </div>
-                <button class="hero-button">View Details</button>
-            </div>
-            <div class="property-card">
-                <div class="img-holder">
-                    <img src="../../assets/images/demo-room-img.jpg" alt="room-images">
-                    <button class="round-button"><i class="fa-regular fa-heart"></i></button>
-                    <p class="property-type">PG/Hostel</p>
-                </div>
-                <div class="info">
-                    <div class="card-heading">Santra Mess</div>
-                    <div class="rating">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </div>
-                    <p><i class="fa-solid fa-location-dot"></i> Ramananda Sarani, School Danga, Bankura</p>
-                    <div class="price">₹ 1200 <p>/Month</p></div>
-                    
-                </div>
-                <button class="hero-button">View Details</button>
-            </div>
-            <div class="property-card">
-                <div class="img-holder">
-                    <img src="../../assets/images/demo-room-img.jpg" alt="room-images">
-                    <button class="round-button"><i class="fa-regular fa-heart"></i></button>
-                    <p class="property-type">PG/Hostel</p>
-                </div>
-                <div class="info">
-                    <div class="card-heading">Santra Mess</div>
-                    <div class="rating">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </div>
-                    <p><i class="fa-solid fa-location-dot"></i> Ramananda Sarani, School Danga, Bankura</p>
-                    <div class="price">₹ 1200 <p>/Month</p></div>
-                    
-                </div>
-                <button class="hero-button">View Details</button>
-            </div>
         </div>
     </section>
     <section id="testimonials-section">
