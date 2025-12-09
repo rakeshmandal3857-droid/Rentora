@@ -104,7 +104,7 @@
     }
 }
 
-.amenities-section{
+.section{
     width: 90%;
     margin: auto;
     border-radius: 16px;
@@ -119,6 +119,16 @@
     display: grid;
     gap: 20px;
     grid-template-columns: repeat(5,1fr);
+}
+@media (max-width : 1000px){
+    .amenities{
+        grid-template-columns: repeat(3,1fr);
+    }
+}
+@media (max-width : 525px){
+    .amenities{
+        grid-template-columns: repeat(2,1fr);
+    }
 }
 .amenity{
     display: flex;
@@ -139,4 +149,75 @@
 iframe{
     width: 50%;
     border-radius: 16px;
+}
+
+
+
+.room-details-section ul{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.room-details-section li{
+    display: flex;
+}
+.room-details-section img{
+    width: min(60vh,30vw);
+    border-radius: 0 16px 16px 0;
+}
+.rooms{
+    border: solid rgba(0, 0, 0, 0.3);
+    border-width: 2px 0 2px 2px;
+    border-radius: 16px 0 0 16px;
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+.room-details{
+    width: 100%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.room-tags{
+    display: flex;
+    gap: 10px;
+    margin-top: 3%;
+}
+.room-details span{
+    padding: 5px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+.room-update{
+    margin: 10px;
+    color: red;
+}
+.price{
+    font-weight: var(--fw-medium);
+    color: var(--rentora-blue);
+}
+.room-details-section button{
+    width: 100%;
+    font-size: var(--body);
+    font-weight: var(--fw-medium);
+    padding: 10px;
+    margin-top: 20px;
+}
+
+@media (max-width : 700px){
+    .room-details-section li{
+        flex-direction: column-reverse;
+    }
+    .room-details-section img{
+        width: 100%;
+        border-radius: 16px 16px 0 0;
+    }
+    .rooms{
+        border-radius: 0 0 16px 16px;
+        border-width: 0 2px 2px 2px;
+    }
 }
