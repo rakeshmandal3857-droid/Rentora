@@ -95,7 +95,7 @@ section{
     color: var(--clean-white);
     border: none;
     border-radius: 8px;
-    padding: 8px 15px;
+    padding: 10px 20px;
     cursor: pointer;
     font-weight: var(--fw-medium);
 }
@@ -198,10 +198,12 @@ label{
 .testimonials-slider,
 .slider{
     display: flex;
-    overflow-x: scroll;
+    overflow-x: scroll ;
+    scroll-snap-type: x mandatory;
     scrollbar-width: none;
 }
 .slide{
+    scroll-snap-align: start;
     width: 100%;
     flex-shrink: 0;
     display: flex;

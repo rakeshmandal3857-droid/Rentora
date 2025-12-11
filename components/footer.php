@@ -76,7 +76,7 @@
                         <div class="message">hmm.. bhalo! tui kemon achis ? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit, deleniti. Laboriosam quis commodi fuga impedit placeat, consequatur aliquid molestiae aliquam excepturi explicabo facilis rem maiores accusamus ipsum perferendis autem et.</div>
                     </li>
                 </ul>
-                <form action="" method="_POST" class="chatbody-footer">
+                <form action="" method="post" class="chatbody-footer">
                     <div class="text-input">
                         <input type="text" placeholder="Type a message...">
                     </div>
@@ -93,77 +93,159 @@
            <i onclick="closePopup()" class="fa-solid icon fa-circle-xmark"></i>
        </div> <hr>
     </div>
-    
-         <!-- user login popup -->
-    <div class="popup-card" id="login-popup">
-       <div class="popup-card-header">
-           <span class="popup-heading">Log in</span>
-           <i onclick="closePopup()" class="fa-solid icon fa-circle-xmark"></i>
-       </div> <hr>
-       <div class="popup-card-body log-in-popup-card-body">
-        <div class="login-section">
-            <form action="" method="post">
-                    <div class="text-input">
-                        <i class="fa-solid fa-phone"></i>
-                        <input type="tel" required maxlength="10" name="mobile-number" placeholder="Enter your mobile number">
-                    </div>
-                    
-                    <div class="text-input">
-                        <i class="fa-solid fa-key"></i>
-                        <input type="password" required name="password" id="password" placeholder="Enter your password">
-                        <i onclick="toggleVisibility(this)" class="fa-solid fa-eye-slash"></i>
-                    </div>
-                    
-                    <button class="hero-button">LOG IN</button>
-                </form>
-                <div class="signup-link"><p>Not a member? <span onclick="slideToSignin()">Sign up now</span></p></div>
-            </div>
-            
-            <div class="signUp-section">
-                <form action="" method="post">
-                    <div class="text-input">
-                        <i class="fa-solid fa-circle-user"></i>
-                        <input type="text" required name="user-name" id="user-name" placeholder="Enter your full name">
-                    </div>
-                    <div class="text-input">
-                        <i class="fa-solid fa-phone"></i>
-                        <input type="tel" required pattern="[0-9]{10}" name="mobile-number" placeholder="Enter your mobile number">
-                    </div>
-                    <div class="text-input">
-                        <i class="fa-solid fa-envelope"></i>
-                        <input type="email" required name="email" id="email" placeholder="Enter your Email ID">
-                    </div>
 
-                    <div class="text-input">
-                        <i class="fa-solid fa-key"></i>
-                        <input type="password" required name="create-pass" id="create-pass" placeholder="Create your password">
-                        <i onclick="toggleVisibility(this)" class="fa-solid fa-eye-slash"></i>
-                    </div>
-                    <div class="text-input">
-                        <i class="fa-solid fa-key"></i>
-                        <input type="password" required name="confirm-pass" id="confirm-pass" placeholder="Confirm your password">
-                        <i onclick="toggleVisibility(this)" class="fa-solid fa-eye-slash"></i>
-                    </div>
 
-                    <div class="radio-input">
-                        <label>Gender : </label>
-                        <label for="male">
-                            <input required type="radio" id="male" name="gender" value="male"> Male
-                        </label>
-                        <label for="female">
-                            <input required type="radio" id="female" name="gender" value="female"> Female
-                        </label>
-                        <label for="other">
-                            <input required type="radio" id="other" name="gender" value="other"> Other
-                        </label>
-                    </div>
-
-                    <button type="submit" class="hero-button">SIGN UP</button>
-            </form>
-            <div class="signup-link"><p>Already have an account ?<span onclick="slideTologin()">Log In</span></p></div>
+    <?php 
+    if(!isset($_SESSION['tenant'])){
+        echo <<<HTML
+        <!-- user login popup -->
+        <div class="popup-card" id="login-popup">
+          <div class="popup-card-header">
+              <span class="popup-heading">Log in</span>
+              <i onclick="closePopup()" class="fa-solid icon fa-circle-xmark"></i>
+          </div> <hr>
+          <div class="popup-card-body log-in-popup-card-body">
+           <div class="login-section">
+               <form action="" method="post">
+                       <div class="text-input">
+                           <i class="fa-solid fa-phone"></i>
+                           <input type="tel" required maxlength="10" name="tenant-login-mobile-number" placeholder="Enter your mobile number">
+                       </div>
+                       
+                       <div class="text-input">
+                           <i class="fa-solid fa-key"></i>
+                           <input type="password" required name="tenant-login-password" id="tenant-login-password" placeholder="Enter your password">
+                           <i onclick="toggleVisibility(this)" class="fa-solid fa-eye-slash"></i>
+                       </div>
+                       
+                       <button class="hero-button" name="tenant-login-submit">LOG IN</button>
+                   </form>
+                   <div class="signup-link"><p>Not a member? <span onclick="slideToSignin()">Sign up now</span></p></div>
+               </div>
+               
+               <div class="signUp-section">
+                   <form action="" method="post">
+                       <div class="text-input">
+                           <i class="fa-solid fa-circle-user"></i>
+                           <input type="text" required name="tenant-user-name" id="tenant-user-name" placeholder="Enter your full name">
+                       </div>
+                       <div class="text-input">
+                           <i class="fa-solid fa-phone"></i>
+                           <input type="tel" required pattern="[0-9]{10}" name="tenant-mobile-number" placeholder="Enter your mobile number">
+                       </div>
+                       <div class="text-input">
+                           <i class="fa-solid fa-envelope"></i>
+                           <input type="email" required name="tenant-email" id="tenant-email" placeholder="Enter your Email ID">
+                       </div>
+        
+                       <div class="text-input">
+                           <i class="fa-solid fa-key"></i>
+                           <input type="password" required name="tenant-create-pass" id="tenant-create-pass" placeholder="Create your password">
+                           <i onclick="toggleVisibility(this)" class="fa-solid fa-eye-slash"></i>
+                       </div>
+                       <div class="text-input">
+                           <i class="fa-solid fa-key"></i>
+                           <input type="password" required name="tenant-confirm-pass" id="tenant-confirm-pass" placeholder="Confirm your password">
+                           <i onclick="toggleVisibility(this)" class="fa-solid fa-eye-slash"></i>
+                       </div>
+        
+                       <div class="radio-input">
+                           <label>Gender : </label>
+                           <label for="male">
+                               <input required type="radio" id="male" name="tenant-gender" value="male"> Male
+                           </label>
+                           <label for="female">
+                               <input required type="radio" id="female" name="tenant-gender" value="female"> Female
+                           </label>
+                           <label for="other">
+                               <input required type="radio" id="other" name="tenant-gender" value="other"> Other
+                           </label>
+                       </div>
+        
+                       <button type="submit" name="tenant-sign-up-submit" class="hero-button">SIGN UP</button>
+               </form>
+               <div class="signup-link"><p>Already have an account ?<span onclick="slideTologin()">Log In</span></p></div>
+           </div>
+          </div>
         </div>
-       </div>
-    </div>
+
+        HTML;
+    }
+    ?>
+
+
+    <!-- tenant login and sign up php starts here  -->
+
+    <?php 
+
+     function tenantLogin($conn, $mobile, $pass){
+        $sql = "SELECT * FROM `tenants` WHERE mobile = '$mobile';";
+        $result = mysqli_query($conn, $sql);
+
+        if(mysqli_num_rows($result) == 1){
+            $row = mysqli_fetch_assoc($result);
+
+            if(password_verify($pass, $row['pass'])){
+                $_SESSION['tenant'] = $row;
+                echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+            }else{
+                echo "<script>alert('Invalid Password!');</script>";
+                echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+            }
+        }else{
+            echo "<script>alert('Mobile number not found!');</script>";
+            echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+        }
+     }
+
+     //  tenant log in 
+
+     if(isset($_POST['tenant-login-submit'])){
+        $mobile = clean($_POST['tenant-login-mobile-number']);
+        $pass = clean($_POST['tenant-login-password']);
+
+        tenantLogin($conn, $mobile, $pass);
+        $_SESSION['tenant-status'] = 'log-in';
+     }
+
+     // tenant sign up  
+
+     if(isset($_POST['tenant-sign-up-submit'])){
+        $name = strtoupper(clean($_POST['tenant-user-name']));
+        $email = strtolower(clean($_POST['tenant-email']));
+        $mobile = clean($_POST['tenant-mobile-number']);
+        $pass = clean($_POST['tenant-create-pass']);
+        $confirmPass = clean($_POST['tenant-confirm-pass']);
+        $gender = strtoupper(clean($_POST['tenant-gender']));
+        $profileImg = '../../assets/images/user-profile-photo.png';
+
+
+        if (empty($name) || empty($email) || empty($mobile) || empty($pass) || empty($confirmPass)) {
+            echo "<script>alert('All fields are required!');</script>";
+            echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+            exit;
+        }
+
+        if($pass !== $confirmPass){
+            echo "<script>alert('Passwords do not matched! ');</script>";
+            echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+            exit;
+        }
+
+        $hashedPass = password_hash($pass, PASSWORD_DEFAULT);
+
+        $sql = "INSERT INTO `tenants` (`name`, `email`, `mobile`, `gender`, `pass`, `img_path`) VALUES ('$name', '$email', '$mobile', '$gender', '$hashedPass', '$profileImg');";
+
+        if(mysqli_query($conn, $sql)){
+            tenantLogin($conn, $mobile, $pass);
+            $_SESSION['tenant-status'] = 'sign-up';
+        }else{
+            echo "<script>alert('Error : Unable to Register.');</script>";
+            echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+        }
+     }
+    ?>
+
 
     <footer id="footer">
         <section>

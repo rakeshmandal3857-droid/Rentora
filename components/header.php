@@ -1,3 +1,11 @@
+<?php
+
+session_start();
+include __DIR__ . '/../../config-db.php';
+// session_unset();
+// session_destroy();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,9 +34,19 @@
     
             <section class="header-right">
                 <button class="round-button" id="menu-button"><i class="fa-solid icon fa-list"></i></button>
-                <button class="round-button" id="massages-button"> <i class="fa-brands icon fa-facebook-messenger"></i></i></button>
-                <button class="round-button" id="notification-button"><i class="fa-solid icon fa-bell"></i></button>
-                <button class="btn-primary" id="login-button">Log in</button>
+
+                <?php 
+                if(!isset($_SESSION['tenant'])){
+                    echo <<<HTML
+                    <button class="btn-primary" id="login-button">Log in / Sign up</button>
+                    HTML;
+                }else{
+                    echo <<<HTML
+                    <button class="round-button" id="massages-button"> <i class="fa-brands icon fa-facebook-messenger"></i></i></button>
+                    <button class="round-button" id="notification-button"><i class="fa-solid icon fa-bell"></i></button>
+                    HTML;
+                }
+                ?>
             </section>
         </nav>
     </header>

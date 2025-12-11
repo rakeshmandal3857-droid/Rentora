@@ -41,6 +41,7 @@ include __DIR__ . '/../../Components/header.php';
                 </label>
                 <label for="acomodation-type">Acomodation Type <i class="fa-solid fa-caret-down"></i>
                     <div class="text-input">
+                        <i class="fa-solid fa-house-chimney"></i>
                         <select name="acomodation-type" id="acomodation-type">
                             <option value="All">All</option>
                             <option value="Hostel/PG">Hostel/PG</option>
