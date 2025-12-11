@@ -4,6 +4,7 @@ const menuPopup = document.querySelector('.header-mid');
 const massagePopup = document.querySelector("#massage-popup");
 const notificationPopup = document.querySelector("#notification-popup");
 const loginPopup = document.querySelector("#login-popup");
+const ownerLoginPopup =document.querySelector('#owner-login-popup')
 
 let openedPopup;
 let fullScreenedPopup = false;
@@ -32,6 +33,11 @@ header.addEventListener('click', (e) => {
     }
 })
 
+function showOwnerLoginPopup(){
+    ownerLoginPopup.classList.add('active');
+    openedPopup = ownerLoginPopup;
+}
+
 function closePopup(){
     popupBackgrund.classList.remove("active");
     openedPopup.classList.remove('active');
@@ -52,6 +58,20 @@ const maximize = () =>{
     }
 }
 
+//nav activation (show only)
+let prevnav = menuPopup.querySelector('.active');
+
+menuPopup.addEventListener('click', (e)=>{
+    if(e.target.tagName === "A"){ 
+        e.preventDefault();          
+
+        prevnav.classList.remove('active');
+        e.target.classList.add('active');
+        prevnav = e.target;
+
+        window.location.href = e.target.href;
+    }
+});
 
 // wishlisting
 function toggleWishlist(e){

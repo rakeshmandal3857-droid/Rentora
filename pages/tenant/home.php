@@ -41,9 +41,11 @@ include __DIR__ . '/../../Components/header.php';
                 </label>
                 <label for="acomodation-type">Acomodation Type <i class="fa-solid fa-caret-down"></i>
                     <div class="text-input">
-                        <i class="fa-solid fa-location-dot"></i>
                         <select name="acomodation-type" id="acomodation-type">
-                            <option value="Apertment">Apertment</option>
+                            <option value="All">All</option>
+                            <option value="Hostel/PG">Hostel/PG</option>
+                            <option value="Apartment">Apartment</option>
+                            <option value="House">House</option>
                         </select>
                     </div>
                 </label>
@@ -378,8 +380,8 @@ include __DIR__ . '/../../Components/header.php';
             <div class="section-heading">Ready to find Your Next Home?</div>
             <div class="desc">Join thousands of happy tenants and landlords. Start exploring properties or list your own today.</div>
             <div class="buttons">
-                <button id="browse-listing"><i class="fa-solid fa-magnifying-glass"></i> Browse Listings</button>
-                <button id="list-your-property"><i class="fa-solid fa-plus"></i> List Your Property</button>
+                <button onclick="scrollToTop()" id="browse-listing"><i class="fa-solid fa-magnifying-glass"></i> Browse Listings</button>
+                <a href="../owner/owner-home.php"><button id="list-your-property"><i class="fa-solid fa-plus"></i> List Your Property</button></a>
             </section>
         </div>
     </section>

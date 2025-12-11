@@ -19,9 +19,9 @@
             
             <section class="header-mid">
                 <a class="active" href="home.php">Home</a>
-                <a href="#">List your Property</a>
-                <a href="aboutUs.php">About Us</a>
-                <a href="#">Contact</a>
+                <a href="../owner/owner-home.php" id="owner-login-button">List your Property</a>
+                <a href="/aboutUs.php">About Us</a>
+                <a href="#footer">Contact</a>
             </section>
     
             <section class="header-right">

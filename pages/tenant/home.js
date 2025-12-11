@@ -1,3 +1,12 @@
+//scroll to top 
+function scrollToTop(){
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    })
+}
+
+
 // serviceLocation section scrooll 
 
 const slider = document.querySelector(".slider");

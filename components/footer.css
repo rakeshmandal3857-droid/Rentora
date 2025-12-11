@@ -52,11 +52,13 @@
 .popup-card hr{
     margin: 10px 0;
 }
+#owner-login-popup,
 #login-popup{
     min-height: 100px;
     width: 340px;
     overflow: hidden;
 }
+#owner-login-popup .popup-card-body,
 #login-popup .popup-card-body{
     font-family: var(--font-secondary);
     width: 650px;
@@ -80,16 +82,19 @@
 .signUp-section{
     display: none;
 }
+#owner-login-popup form,
 #login-popup form{
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
+#owner-login-popup label,
 #login-popup label{
     font-size: var(--body);
     font-weight: var(--fw-regular);
 }
+#owner-login-popup span,
 #login-popup span{
     text-decoration: underline;
     color: var(--rentora-blue);
@@ -104,6 +109,8 @@
     display: flex;
     gap: 5px;
 }
+#owner-login-popup input[type=number]::-webkit-inner-spin-button,
+#owner-login-popup input[type=number]::-webkit-outer-spin-button,
 #login-popup input[type=number]::-webkit-inner-spin-button,
 #login-popup input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;

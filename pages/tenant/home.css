@@ -34,27 +34,6 @@ video{
     text-align: start;
     margin: 0;
 }
-.hero-button{
-    font-size: var(--h6);
-    font-weight: var(--fw-medium);
-    padding: 10px 20px ;
-    border: 2px solid var(--rentora-blue);
-    background-color: var(--rentora-blue);
-    color: white;
-    border-radius: 20px;
-    display: flex;
-    place-items: center;
-    gap: 5px;
-    cursor: pointer;
-    animation: opening 0.7s ease;
-    transition: all 0.3s ease;
-    margin: 10px 0;
-}
-.hero-button:hover{
-    background-color: transparent;
-    border-color: var(--rentora-blue);
-    color: var(--rentora-blue);
-}
 
 .hero-section-text{
     position: relative;

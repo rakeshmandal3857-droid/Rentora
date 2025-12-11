@@ -37,6 +37,9 @@
     padding: 0;
     margin: 0;
 }
+html{
+    scroll-behavior: smooth;
+}
 body.no-scroll {
     overflow: hidden;
 }
@@ -63,6 +66,28 @@ section{
     place-items: center;
     font-size: var(--h3);
     font-family: var(--font-primary);
+}
+.hero-button{
+    font-size: var(--h6);
+    font-weight: var(--fw-medium);
+    padding: 10px 20px ;
+    border: 2px solid var(--rentora-blue);
+    background-color: var(--rentora-blue);
+    color: white;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    animation: opening 0.7s ease;
+    transition: all 0.3s ease;
+    margin: 10px 0;
+}
+.hero-button:hover{
+    background-color: transparent;
+    border-color: var(--rentora-blue);
+    color: var(--rentora-blue);
 }
 
 .btn-primary{
@@ -202,6 +227,13 @@ label{
     color: red;
     animation: wishlisted 0.3s;
 }
+
+.error{
+    border: 1px solid #dd5454;
+    box-shadow: 2px 2px 5px rgba(255, 0, 0, 0.3),-2px -2px 5px rgba(255, 0, 0, 0.3);
+    animation: error 0.3s ease-in-out;
+}
+
 @keyframes opening{
     from{
         opacity: 0;
@@ -220,4 +252,12 @@ label{
     }80%{
         transform: scale(100%);
     }
+}
+@keyframes error {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
 }
