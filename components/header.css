@@ -78,3 +78,66 @@ nav{
         display: grid;
     }
 }
+
+
+
+/* toast-notification  */
+.toast-notification{
+    position: fixed;
+    right: -500px;
+    top: 20px;
+    background-color: var(--clean-white);
+    display: flex;
+    gap: 10px;
+    padding: 15px 20px;
+    border-radius: 6px;
+    z-index: 3000;
+    box-shadow:  3px 3px 10px rgba(0, 0, 0, 0.3), -3px -3px 10px rgba(0, 0, 0, 0.3);
+    font-family: var(--font-secondary);
+    transition: all 0.3s ease-in-out;
+    visibility: hidden;
+}
+
+.toast-notification.active{
+    right: 30px;
+    top: 20px;
+    visibility: visible;
+
+}
+.toast-notification::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 0%;
+    border-radius: 0 0 5px 5px;
+    animation: timer 3s linear forwards; 
+}
+@keyframes timer {
+    from { width: 0%; }
+    to { width: 100%; }
+}
+
+.toast-notification> :last-child{
+    cursor: pointer;
+}
+
+.toast-notification.success::after {
+    background-color: var(--success);
+}
+.toast-notification.success> :first-child{
+    color: var(--success);
+}
+.toast-notification.warning::after{
+   background-color: var(--warning);
+}
+.toast-notification.warning> :first-child{
+    color: var(--warning);
+}
+.toast-notification.danger::after{
+   background-color: var(--danger);
+}
+.toast-notification.danger> :first-child{
+    color: var(--danger);
+}

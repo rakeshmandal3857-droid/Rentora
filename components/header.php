@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 include __DIR__ . '/../../config-db.php';
 // session_unset();
@@ -28,7 +27,7 @@ include __DIR__ . '/../../config-db.php';
             <section class="header-mid">
                 <a class="active" href="home.php">Home</a>
                 <a href="../owner/owner-home.php" id="owner-login-button">List your Property</a>
-                <a href="/aboutUs.php">About Us</a>
+                <a href="./aboutUs.php">About Us</a>
                 <a href="#footer">Contact</a>
             </section>
     
@@ -51,3 +50,6 @@ include __DIR__ . '/../../config-db.php';
         </nav>
     </header>
 
+    <div class="toast-notification">
+        
+    </div>

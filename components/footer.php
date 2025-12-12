@@ -188,13 +188,18 @@
             if(password_verify($pass, $row['pass'])){
                 $_SESSION['tenant'] = $row;
                 echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+                exit;
             }else{
-                echo "<script>alert('Invalid Password!');</script>";
+                $_SESSION['status'] = 'error';
+                $_SESSION['message'] = "Incorrect password. Please try again.";
                 echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+                exit;
             }
         }else{
-            echo "<script>alert('Mobile number not found!');</script>";
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = "Account not found. Please sign up to log in.";
             echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+            exit;
         }
      }
 
@@ -204,8 +209,9 @@
         $mobile = clean($_POST['tenant-login-mobile-number']);
         $pass = clean($_POST['tenant-login-password']);
 
+        $_SESSION['status'] = 'success';
+        $_SESSION['message'] = "You have logged in successfully.";
         tenantLogin($conn, $mobile, $pass);
-        $_SESSION['tenant-status'] = 'log-in';
      }
 
      // tenant sign up  
@@ -221,13 +227,34 @@
 
 
         if (empty($name) || empty($email) || empty($mobile) || empty($pass) || empty($confirmPass)) {
-            echo "<script>alert('All fields are required!');</script>";
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = "Please fill in all required fields to sign up.";
             echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
             exit;
+
         }
 
         if($pass !== $confirmPass){
-            echo "<script>alert('Passwords do not matched! ');</script>";
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = "Passwords do not match.";
+            echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+            exit;
+        }
+        $sql = "SELECT * FROM `tenants` WHERE mobile = '$mobile';";
+        $result = mysqli_query($conn, $sql);
+        
+        if(mysqli_num_rows($result) > 0){
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = "Number already registered. Log in.";
+            echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+            exit;
+        }
+        $sql = "SELECT * FROM `tenants` WHERE email = '$email';";
+        $result = mysqli_query($conn, $sql);
+
+        if(mysqli_num_rows($result) > 0){
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = "Email already registered. Log in.";
             echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
             exit;
         }
@@ -237,11 +264,14 @@
         $sql = "INSERT INTO `tenants` (`name`, `email`, `mobile`, `gender`, `pass`, `img_path`) VALUES ('$name', '$email', '$mobile', '$gender', '$hashedPass', '$profileImg');";
 
         if(mysqli_query($conn, $sql)){
+            $_SESSION['status'] = 'success';
+            $_SESSION['message'] = "Welcome! Your account has been created.";
             tenantLogin($conn, $mobile, $pass);
-            $_SESSION['tenant-status'] = 'sign-up';
         }else{
-            echo "<script>alert('Error : Unable to Register.');</script>";
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = "Error: Unable to Register.";
             echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+            exit;
         }
      }
     ?>
@@ -308,5 +338,13 @@
 
     <script src="../../components//footer.js"></script>
     <script src="../../assets/js/main.js"></script>
+    <?php  
+    if(isset($_SESSION['status'])){
+        echo "<script>showToastNotification('".$_SESSION['status'] ."','". $_SESSION['message']."');</script>";
+        unset($_SESSION['status']);
+        unset($_SESSION['message']);
+    }
+    ?>
 </body>
 </html>
+

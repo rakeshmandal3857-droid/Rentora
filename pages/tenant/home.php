@@ -34,8 +34,8 @@ include __DIR__ . '/../../Components/header.php';
                 <label for="locality">Locality <i class="fa-solid fa-caret-down"></i>
                     <div class="text-input">
                         <i class="fa-solid fa-location-dot"></i>
-                        <select name="locality" id="locality">
-                            <option value="School Danga">School Danga</option>
+                        <select name="locality" class="select-localities" id="locality">
+                            
                         </select>
                     </div>
                 </label>

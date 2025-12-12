@@ -15,6 +15,21 @@ function slideTologin(){
 }
 
 
+// showing error on not matching passwords
+const tenantCreatePass = document.querySelector('#tenant-create-pass');
+const tenantConfirmPass = document.querySelector('#tenant-confirm-pass');
+
+function checkPasswordMatch() {
+    if (tenantCreatePass.value !== tenantConfirmPass.value) {
+        tenantConfirmPass.parentElement.classList.add('error');
+    } else {
+        tenantConfirmPass.parentElement.classList.remove('error');
+    }
+}
+if(tenantConfirmPass){
+    tenantConfirmPass.addEventListener('input', checkPasswordMatch);
+}
+
 
 // password visibility
 
