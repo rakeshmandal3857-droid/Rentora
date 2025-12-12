@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 include __DIR__ . '/../../config-db.php';
 // session_unset();
@@ -7,6 +6,7 @@ include __DIR__ . '/../../config-db.php';
 
 if(isset($_SESSION['owner'])){
     echo "<script>window.location.href = '/rentora/pages/owner/add-accomodation.php';</script>";
+    exit;
 }
 ?>
 
@@ -44,6 +44,9 @@ if(isset($_SESSION['owner'])){
             </section>
         </nav>
     </header>
+    <div class="toast-notification">
+        
+    </div>
 
 
     <button class="btn-primary" onclick="showOwnerLoginPopup()">List Your Property</button>
@@ -120,12 +123,18 @@ if(isset($_SESSION['owner'])){
             if(password_verify($pass, $row['pass'])){
                 $_SESSION['owner'] = $row;
                 echo "<script>window.location.href = '/rentora/pages/owner/add-accomodation.php';</script>";
+                exit;
             }else{
-                echo "<script>alert('Invalid Password!');</script>";
+                $_SESSION['status'] = 'error';
+                $_SESSION['message'] = "Incorrect password. Please try again.";
                 echo "<script>window.location.href = '/rentora/pages/owner/owner-home.php';</script>";
+                exit;
             }
         }else{
-            echo "<script>alert('Mobile number not found!');</script>";
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = "Account not found. Please sign up to log in.";
+            echo "<script>window.location.href = '/rentora/pages/owner/owner-home.php';</script>";
+            exit;
         }
      }
 
@@ -135,8 +144,10 @@ if(isset($_SESSION['owner'])){
         $mobile = clean($_POST['owner-log-in-mobile-number']);
         $pass = clean($_POST['owner-log-in-password']);
 
+        $_SESSION['status'] = 'success';
+        $_SESSION['message'] = "You have logged in successfully.";
+
         ownerLogin($conn, $mobile, $pass);
-        $_SESSION['status'] = 'log-in';
     }
 
     //  owner sign up  
@@ -151,12 +162,34 @@ if(isset($_SESSION['owner'])){
 
 
         if (empty($name) || empty($email) || empty($mobile) || empty($pass) || empty($confirmPass)) {
-            echo "<script>alert('All fields are required!');</script>";
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = "Please fill in all required fields to sign up.";
+            echo "<script>window.location.href = '/rentora/pages/owner/owner-home.php';</script>";
             exit;
         }
 
         if($pass !== $confirmPass){
-            echo "<script>alert('Passwords do not matched! ');</script>"; 
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = "Passwords do not match.";
+            echo "<script>window.location.href = '/rentora/pages/owner/owner-home.php';</script>";
+            exit;
+        }
+        $sql = "SELECT * FROM `owners` WHERE mobile = $mobile;";
+        $result = mysqli_query($conn, $sql);
+        
+        if(mysqli_num_rows($result) > 0){
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = "Number already registered. Log in.";
+            echo "<script>window.location.href = '/rentora/pages/owner/owner-home.php';</script>";
+            exit;
+        }
+        $sql = "SELECT * FROM `owners` WHERE email = '$email';";
+        $result = mysqli_query($conn, $sql);
+
+        if(mysqli_num_rows($result) > 0){
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = "Email already registered. Log in.";
+            echo "<script>window.location.href = '/rentora/pages/owner/owner-home.php';</script>";
             exit;
         }
 
@@ -165,10 +198,15 @@ if(isset($_SESSION['owner'])){
         $sql = "INSERT INTO `owners` (`name`, `email`, `mobile`, `pass`, `img_path`) VALUES ('$name', '$email', '$mobile', '$hashedPass', '$profileImg');";
 
         if(mysqli_query($conn, $sql)){
+            $_SESSION['status'] = 'success';
+            $_SESSION['message'] = "Welcome! Your account has been created.";
+
             ownerLogin($conn, $mobile, $pass);
-            $_SESSION['status'] = 'sign-up';
         }else{
-            echo "<script>alert('Error : Unable to Register.');</script>";
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = "Error: Unable to Register.";
+            echo "<script>window.location.href = '/rentora/pages/owner/owner-home.php';</script>";
+            exit;
         }
      }
      ?>
@@ -333,5 +371,14 @@ if(isset($_SESSION['owner'])){
 
     <script src="../../components//footer.js"></script>
     <script src="../../assets/js/main.js"></script>
+
+    <?php  
+    if(isset($_SESSION['status'])){
+        echo "<script>showToastNotification('".$_SESSION['status'] ."','". $_SESSION['message']."');</script>";
+        unset($_SESSION['status']);
+        unset($_SESSION['message']);
+    }
+    ?>
+    
 </body>
 </html>

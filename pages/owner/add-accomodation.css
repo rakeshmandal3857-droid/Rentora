@@ -55,15 +55,18 @@ input, select, textarea {
     border-radius: 5px;
     font-size: 14px;
 }
+.options input,
 .checkbox-group input{
     width: fit-content;
 }
+.options,
 .checkbox-group{
     display: flex;
     flex-wrap: wrap;
     justify-content: start;
     gap: 15px;
 }
+.options label,
 .checkbox-group label {
     font-weight: normal;
     display: flex;
