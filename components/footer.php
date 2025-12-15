@@ -94,6 +94,78 @@
        </div> <hr>
     </div>
 
+    <!-- write a review form -->
+    <div class="popup-card" id="review-popup">
+       <div class="popup-card-header">
+           <span>Share Your Experience</span>
+           <i onclick="closePopup()" class="fa-solid icon fa-circle-xmark"></i>
+       </div> <hr>
+       <div class="popup-card-body">
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                <div class="rating-container">
+                    <div class="stars">
+                        <input type="radio" name="rating" id="star5" required value="5">
+                        <label for="star5">★</label>
+
+                        <input type="radio" name="rating" id="star4" required value="4">
+                        <label for="star4">★</label>
+
+                        <input type="radio" name="rating" id="star3" required value="3">
+                        <label for="star3">★</label>
+
+                        <input type="radio" name="rating" id="star2" required value="2">
+                        <label for="star2">★</label>
+
+                        <input type="radio" name="rating" id="star1" required value="1">
+                        <label for="star1">★</label>
+                    </div>
+
+                    <textarea rows="4" cols="30" name="review" required placeholder="Share the details of your own experience."></textarea>
+                    <div>
+                        <button type="submit" name="review-button-submit" class="btn-primary">Submit Rating</button>
+                    </div>
+                </div>
+            </form>
+       </div>
+    </div>
+
+    <?php
+    // write review php 
+    if(isset($_POST['review-button-submit'])){
+        if (isset($_SESSION['owner']) || isset($_SESSION['tenant'])){
+            $rating = intval($_POST['rating']);
+            $review = mysqli_real_escape_string($conn, $_POST['review']);
+            if(isset($_SESSION['owner'])){
+                $writerID = $_SESSION['owner']['user_id'];
+                $userRole = 'owners';
+            }elseif(isset($_SESSION['tenant'])){
+                $writerID = $_SESSION['tenant']['user_id'];
+                $userRole = 'tenants';
+            }
+
+            $sql = "INSERT INTO `testimonials` (`rating`, `review`, `writer_id`, `writer_role`) VALUES ('$rating', '$review', '$writerID', '$userRole');";
+            if($result = mysqli_query($conn, $sql)){
+                $_SESSION['status'] = 'success';
+                $_SESSION['message'] = "Thank you for sharing your experience!";
+                echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+                exit;
+            }else{
+                $_SESSION['status'] = 'error';
+                $_SESSION['message'] = "Review submission failed. Please try again.";
+                echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+                exit;
+            }
+
+        }else{
+            $_SESSION['status'] = 'warning';
+            $_SESSION['message'] = "Want to leave a review? Please log in first!";
+            echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
+            exit;
+        }
+    }
+    
+    ?>
+
 
     <?php 
     if(!isset($_SESSION['tenant'])){
@@ -269,7 +341,7 @@
             tenantLogin($conn, $mobile, $pass);
         }else{
             $_SESSION['status'] = 'error';
-            $_SESSION['message'] = "Error: Unable to Register.";
+            $_SESSION['message'] = "Unable to Register.";
             echo "<script>window.location.href = '/rentora/pages/tenant/home.php';</script>";
             exit;
         }
@@ -297,7 +369,7 @@
                 <div class="heading">Quick Links</div>
                 <ul>
                     <li><a href="#">Home</a></li>
-                    <li><a href="../owner/owner-home.php">List Your Property</a></li>
+                    <li><a target="_blank" href="../owner/owner-home.php">List Your Property</a></li>
                     <li><a href="./aboutUS.php">About US</a></li>
                     <li><a href="#footer">Contact</a></li>
                 </ul>

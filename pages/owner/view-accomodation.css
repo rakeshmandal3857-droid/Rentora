@@ -1,0 +1,141 @@
+.accomodation-nav{
+    display: flex;
+    width: 100%;
+    min-height: 40px;
+    background-color: var(--clean-white);
+    overflow: auto;
+    margin-top:-13px;
+    padding: 2px;
+    font-size: var(--body);
+    font-weight: var(--medium);
+    font-family: var(--font-primary);
+    scrollbar-width: none;
+}
+.accomodation-nav li{
+    padding: 10px 25px;
+    border-radius: 16px 16px 0 0;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.accomodation-nav li.active{
+    background-color: var(--soft-gray);
+}
+.wrapper{
+    padding: 0;
+}
+.wrapper> :last-child{
+    background-color: var(--soft-gray);
+    min-height: 100px;
+    margin-top: -2px;
+    padding: 20px;
+    overflow-x: hidden;
+    display: flex;
+}
+.accomodation-card-holder{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 40px;
+    transition: all 0.3s ease;
+}
+.room-details-section{
+    min-width: 100%;
+    margin: 20px 0;
+    background-color: var(--clean-white);
+}
+
+.rooms-wrapper{
+    background-color: var(--clean-white);
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3), -3px -3px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+}
+.rooms-wrapper button{
+    max-width: 200px;
+}
+.accomodation-card section{
+    background-color: var(--clean-white);
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3), -3px -3px 5px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+.accomodation-card section .hero-section{
+    width: 100%;
+    margin: 0 0 10px 0;
+}
+.button-wrapper{
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+    padding: 10px;
+}
+.edit-accomodation{
+    background-color: var(--success);
+}
+.edit-accomodation:hover{
+    background-color: var(--success);
+}
+.delete-accomodation{
+    background-color: var(--danger);
+}
+.delete-accomodation:hover{
+    background-color: var(--danger);
+}
+#edit-accomodation-popup.active,
+#delete-confirmation-popup.active{
+    right: 50%;
+    top: 40%;
+    transform: translate(50%, -50%) scale(100%);
+    opacity: 1;
+    height: 100px;
+    width: 250px;
+}
+#edit-accomodation-popup,
+#delete-confirmation-popup{
+    right: 50%;
+    top: 40%;
+    transform: translate(50%, -50%) scale(0);
+    opacity: 0;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    max-height: 100px;
+}
+#edit-accomodation-popup.popup-card{
+    width: max(300px, 60vw);
+    overflow: auto;
+    min-height: 80vh;
+    margin-top: 10vh;
+    scrollbar-width: none;
+}
+#edit-accomodation-popup.popup-card.actice{
+    max-width: max(300px, 60vw);
+    max-height: 80vh;
+    overflow: auto;
+}
+#edit-accomodation-popup .wrapper{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: 0;
+    flex-direction: column;
+    gap: 10px;
+}
+#delete-confirmation-popup .buttons{
+    display: flex;
+    gap: 16px;
+}
+#delete-confirmation-popup i{
+    font-size: var(--h1);
+    color: var(--danger);
+}
+#delete-confirmation-popup p{
+    font-size: var(--body);
+    text-align: center;
+}
+#delete-confirmation-popup .heading{
+    text-align: center;
+}
+    

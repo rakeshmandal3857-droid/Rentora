@@ -59,19 +59,23 @@ const maximize = () =>{
 }
 
 //nav activation (show only)
-let prevnav = menuPopup.querySelector('.active');
+let prevnav;
+if(menuPopup){
+    prevnav = menuPopup.querySelector('.active');
+    
+    menuPopup.addEventListener('click', (e)=>{
+        if(e.target.tagName === "A"){ 
+            e.preventDefault();          
+    
+            prevnav.classList.remove('active');
+            e.target.classList.add('active');
+            prevnav = e.target;
+    
+            window.location.href = e.target.href;
+        }
+    });
+}
 
-menuPopup.addEventListener('click', (e)=>{
-    if(e.target.tagName === "A"){ 
-        e.preventDefault();          
-
-        prevnav.classList.remove('active');
-        e.target.classList.add('active');
-        prevnav = e.target;
-
-        window.location.href = e.target.href;
-    }
-});
 
 // wishlisting
 function toggleWishlist(e){
@@ -93,32 +97,34 @@ function showerror(id){
 const toastNotification = document.querySelector(".toast-notification");
 
 function showToastNotification(type, massege){
-    switch (type){
-        case "success":
-            toastNotification.innerHTML =`
-            <i class="fa-solid fa-circle-check"></i>
-            <div class="massege">Success: ${massege}</div>
-            <i class="fa-solid fa-xmark" onclick="closeToastNotification()"></i>`
-            toastNotification.classList.add('success');
-            break;
-        case 'error':
-            toastNotification.innerHTML =`
-            <i class="fa-solid fa-circle-check"></i>
-            <div class="massege">Error: ${massege}</div>
-            <i class="fa-solid fa-xmark" onclick="closeToastNotification()"></i>`
-            toastNotification.classList.add('danger');
-            break;
-        case 'warning':
-            toastNotification.innerHTML =`
-            <i class="fa-solid fa-circle-check"></i>
-            <div class="massege">Warning: ${massege}</div>
-            <i class="fa-solid fa-xmark" onclick="closeToastNotification()"></i>`
-            toastNotification.classList.add('warning');
-            break;
-    }
-    toastNotification.classList.add('active');
-
-    setTimeout(closeToastNotification,3500);
+    setTimeout(()=>{
+        switch (type){
+            case "success":
+                toastNotification.innerHTML =`
+                <i class="fa-solid fa-circle-check"></i>
+                <div class="massege">Success: ${massege}</div>
+                <i class="fa-solid fa-xmark" onclick="closeToastNotification()"></i>`
+                toastNotification.classList.add('success');
+                break;
+            case 'error':
+                toastNotification.innerHTML =`
+                <i class="fa-solid fa-circle-check"></i>
+                <div class="massege">Error: ${massege}</div>
+                <i class="fa-solid fa-xmark" onclick="closeToastNotification()"></i>`
+                toastNotification.classList.add('danger');
+                break;
+            case 'warning':
+                toastNotification.innerHTML =`
+                <i class="fa-solid fa-circle-check"></i>
+                <div class="massege">Warning: ${massege}</div>
+                <i class="fa-solid fa-xmark" onclick="closeToastNotification()"></i>`
+                toastNotification.classList.add('warning');
+                break;
+        }
+        toastNotification.classList.add('active');
+    
+        setTimeout(closeToastNotification,3500);
+    },100);
 }
 
 function closeToastNotification(){
@@ -185,4 +191,54 @@ function showLocalities(id){
         })
     }
    })
+}
+
+
+//owner-side nav showing and closing
+const ownerNav = document.querySelector(".owner-nav");
+function showSideNav(){
+    popupBackgrund.classList.add('active');
+    ownerNav.classList.add('active');
+    openedPopup = ownerNav;
+}
+
+const reviewPopup = document.querySelector('#review-popup');
+function showReviewForm(){
+    popupBackgrund.classList.add('active');
+    reviewPopup.classList.add('active');
+    openedPopup = reviewPopup;
+}
+
+const deleteConfirmPopup = document.querySelector('#delete-confirmation-popup');
+// const deleteConfirmbutton = document.querySelector('#delete-confirmation-button');
+// if(deleteConfirmPopup){
+//     deleteConfirmbutton.addEventListener('click', showDeletePopup)
+// }
+function showDeletePopup(table, id){
+    popupBackgrund.classList.add('active');
+    deleteConfirmPopup.classList.add('active');
+    openedPopup = deleteConfirmPopup;
+    updateDeletePopup(table,id);
+}
+
+function updateDeletePopup(table,id){
+    deleteConfirmPopup.innerHTML =`
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div class="heading">Are you sure?</div>
+        <p>This action will delete all your informations about this accomodation, You won't be able to revert it.</p>
+        <div class="buttons">
+         <button onclick="closePopup()" class="btn-primary">Cancel</button>
+         <form action="view-accomodation.php" method="post">
+            <button class="btn-primary delete-accomodation" name="confirmed-delete" value = "${table}-${id}">Confirm</button>
+         </form>
+        </div>
+    ` 
+}
+
+const editAccomodationPopup = document.querySelector('#edit-accomodation-popup')
+function showEditAccomodationPopup(id){
+    popupBackgrund.classList.add('active');
+    editAccomodationPopup.classList.add('active');
+    openedPopup = editAccomodationPopup;
+    updateEditAccomodationpopup(id);
 }

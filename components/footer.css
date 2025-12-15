@@ -331,3 +331,70 @@ footer .icon:hover{
         grid-template-columns: 1fr;
     }
 }
+
+
+
+/* reviewform css */
+#review-popup.active{
+    right: 50%;
+    top: 40%;
+    min-width: 250px;
+    width: 40vw;
+}
+#review-popup{
+    top: 40%;
+    transform: translate(50%, -50%);
+}
+.rating-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+.rating-container> :last-child{
+    display: flex;
+    justify-content: end;
+}
+
+#review-popup .stars {
+    width: 200px;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+}
+
+#review-popup .stars input {
+  display: none;
+}
+
+#review-popup .stars label {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  font-size: 25px;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+#review-popup form{
+    width: 100%;
+    height: 100%;
+}
+#review-popup textarea{
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    font-family: var(--font-secondary);
+}
+#review-popup button{
+    max-width: 130px;
+    border-radius: 50px;
+}
+
+#review-popup .stars input:checked ~ label,
+#review-popup .stars label:hover,
+#review-popup .stars label:hover ~ label {
+  color: gold;
+}

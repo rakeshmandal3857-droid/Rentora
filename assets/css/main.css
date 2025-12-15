@@ -179,14 +179,26 @@ label{
     width: fit-content;
     gap: 3px;
 }
-.rating{
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    font-size: 0.6rem;
-    color: #FFCC00;
-}
 
+.rating {
+    position: relative;
+    display: inline-block;
+    line-height: 1;
+}
+.rating i {
+    font-size: var(--small);
+}
+.stars-bg {
+    color: #ddd; /* gray */
+}
+.stars-fill {
+    color: #f5c518; /* yellow */
+    position: absolute;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    overflow: hidden;
+}
 .badge p{
     font-size: min(0.65rem, var(--small));
 }

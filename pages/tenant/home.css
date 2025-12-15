@@ -296,6 +296,9 @@ video{
     padding-bottom: 10px ;
     transition: all 0.3s ease;
 }
+.property-card .rating i{
+    font-size: 10px;
+}
 .property-card:hover{
     transform: translateY(-5px);
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3), -2px -2px 10px rgba(0, 0, 0, 0.3);
@@ -399,14 +402,14 @@ video{
     display: flex;
     justify-content: center;
 }
+.testimonials-card .rating{
+    margin-bottom: 10px;
+}
 
 .testimonials-card{
     max-width: 400px;
     width: 80%;
     height: fit-content;
-    display: flex;
-    flex-direction: column;
-    gap: 10px; 
     padding: 20px;
     border-radius: 10px;
     box-shadow: 10px 20px 0 #e8effc , -3px -1px 5px rgba(0, 0, 0, 0.31);

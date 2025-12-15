@@ -26,7 +26,7 @@ include __DIR__ . '/../../config-db.php';
             
             <section class="header-mid">
                 <a class="active" href="home.php">Home</a>
-                <a href="../owner/owner-home.php" id="owner-login-button">List your Property</a>
+                <a href="../owner/owner-home.php" target="_blank" id="owner-login-button">List your Property</a>
                 <a href="./aboutUs.php">About Us</a>
                 <a href="#footer">Contact</a>
             </section>
@@ -41,8 +41,9 @@ include __DIR__ . '/../../config-db.php';
                     HTML;
                 }else{
                     echo <<<HTML
-                    <button class="round-button" id="massages-button"> <i class="fa-brands icon fa-facebook-messenger"></i></i></button>
-                    <button class="round-button" id="notification-button"><i class="fa-solid icon fa-bell"></i></button>
+                    <!-- <button class="round-button" id="massages-button"> <i class="fa-brands icon fa-facebook-messenger"></i></i></button>
+                    <button class="round-button" id="notification-button"><i class="fa-solid icon fa-bell"></i></button> -->
+                    <form action="" method="post"><button class="round-button" name="logout-button" type="submit"><i class="fa-solid fa-right-from-bracket"></i></button></form>
                     HTML;
                 }
                 ?>
@@ -53,3 +54,14 @@ include __DIR__ . '/../../config-db.php';
     <div class="toast-notification">
         
     </div>
+
+    <?php
+    if(isset($_POST['logout-button'])){
+        session_start();
+        unset($_SESSION['tenant']);
+        $_SESSION['status'] = 'success';
+        $_SESSION['message'] = "Logged out successfully";
+        echo "<script>window.location='home.php';</script>";
+        exit;
+    }
+    ?>

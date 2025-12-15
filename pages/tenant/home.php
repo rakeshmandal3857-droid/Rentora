@@ -24,7 +24,7 @@ include __DIR__ . '/../../Components/header.php';
             <div class="bottom-badges"><div><i class="fa-solid fa-circle-check"></i>Varified Owners</div><div><i class="fa-solid fa-circle-check"></i>No Hidden Fees</div></div>
         </div>
         <div class="glass-section">
-            <form action="" method="get">
+            <form action="search.php" method="get">
                 <label for="location">Location <i class="fa-solid fa-caret-down"></i>
                     <div class="text-input">
                         <i class="fa-solid fa-location-dot"></i>
@@ -50,7 +50,7 @@ include __DIR__ . '/../../Components/header.php';
                         </select>
                     </div>
                 </label>
-                <button class="btn-primary">Search</button>
+                <button class="btn-primary" name="search-button">Search</button>
             </form>
 
             <div class="service-location-section">
@@ -65,10 +65,11 @@ include __DIR__ . '/../../Components/header.php';
                         $result = mysqli_query($conn, $quary);
 
                         while($row = mysqli_fetch_assoc($result)){
+                            $cityName = ucfirst(strtolower($row['city_name']));
                         echo <<<HTML
                         <div class="city-card" id = "city-id-{$row['city_id']}">
                             <img src="{$row['city_img_path']}" alt="city name">
-                            <div class="card-heading"> {$row['city_name'] }</div>
+                            <div class="card-heading"> $cityName</div>
                         </div>
                         HTML;
                         }
@@ -144,91 +145,45 @@ include __DIR__ . '/../../Components/header.php';
         <div class="section-heading">Featured Properties</div>
         <div class="desc">Handpicked properties for you.</div>
         <div class="featured-properties-wrapper">
-            <div class="property-card">
-                <div class="img-holder">
-                    <img src="../../assets/images/demo-room-img.jpg" alt="room-images">
-                    <button class="round-button" onclick="toggleWishlist(this)"><i class="fa-regular fa-heart"></i></button>
-                    <p class="property-type">PG/Hostel</p>
-                </div>
-                <div class="info">
-                    <div class="card-heading">Santra Mess</div>
-                    <div class="rating">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
+            <?php
+            $sql = "SELECT * FROM `accommodation` GROUP BY `location` LIMIT 4;";
+            $result = mysqli_query($conn, $sql);
+            if($result && mysqli_num_rows($result) > 0){
+                while($row = mysqli_fetch_assoc($result)){
+                    $id = $row['accommodation_id'];
+                    $accType = ucwords(strtolower($row['accommodation_type']));
+                    $accName = ucwords(strtolower($row['accommodation_name']));
+                    $accAdd = $add = ucwords(strtolower($row['street_address'])) .", " . ucwords(strtolower($row['locality'])) .", " . ucwords(strtolower($row['location']))  .", " . $row['pincode'];
+                    echo<<<HTML
+                    <div class="property-card" id ="$id">
+                        <div class="img-holder">
+                            <img src="../../assets/images/demo-room-img.jpg" alt="room-images">
+                            <button class="round-button" onclick="toggleWishlist(this)"><i class="fa-regular fa-heart"></i></button>
+                            <p class="property-type">$accType</p>
+                        </div>
+                        <div class="info">
+                            <div class="card-heading">$accName</div>
+                            <div class="rating">
+                                <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                                <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            </div>
+                            <p><i class="fa-solid fa-location-dot"></i> $accAdd</p>
+                    HTML;
+                    $priceSql ="SELECT MIN(`rent`) AS `min_rent` FROM `rooms` WHERE `accommodation_id` = $id;";
+                    $priceResult = mysqli_query($conn, $priceSql);
+                    if($priceResult && mysqli_num_rows($priceResult) == 1){
+                        if($priceRow = mysqli_fetch_assoc($priceResult)){
+                            echo '<div class="price">₹ '."{$priceRow['min_rent']}".' <p>/Month</p></div>';
+                        }
+                    }
+                    echo<<<HTML
+                        </div>
+                        <a href="./room-details.php?id=$id"><button class="hero-button">View Details</button></a>
                     </div>
-                    <p><i class="fa-solid fa-location-dot"></i> Ramananda Sarani, School Danga, Bankura</p>
-                    <div class="price">₹ 1200 <p>/Month</p></div>
-                    
-                </div>
-                <a href="./room-details.php?id=1"><button class="hero-button">View Details</button></a>
-            </div>
-            <div class="property-card">
-                <div class="img-holder">
-                    <img src="../../assets/images/demo-room-img.jpg" alt="room-images">
-                    <button class="round-button" onclick="toggleWishlist(this)"><i class="fa-regular fa-heart"></i></button>
-                    <p class="property-type">PG/Hostel</p>
-                </div>
-                <div class="info">
-                    <div class="card-heading">Santra Mess</div>
-                    <div class="rating">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </div>
-                    <p><i class="fa-solid fa-location-dot"></i> Ramananda Sarani, School Danga, Bankura</p>
-                    <div class="price">₹ 1200 <p>/Month</p></div>
-                    
-                </div>
-                <a href="./room-details.php?id=1"><button class="hero-button">View Details</button></a>
-            </div>
-            <div class="property-card">
-                <div class="img-holder">
-                    <img src="../../assets/images/demo-room-img.jpg" alt="room-images">
-                    <button class="round-button" onclick="toggleWishlist(this)"><i class="fa-regular fa-heart"></i></button>
-                    <p class="property-type">PG/Hostel</p>
-                </div>
-                <div class="info">
-                    <div class="card-heading">Santra Mess</div>
-                    <div class="rating">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </div>
-                    <p><i class="fa-solid fa-location-dot"></i> Ramananda Sarani, School Danga, Bankura</p>
-                    <div class="price">₹ 1200 <p>/Month</p></div>
-                    
-                </div>
-                <a href="./room-details.php?id=1"><button class="hero-button">View Details</button></a>
-            </div>
-            <div class="property-card">
-                <div class="img-holder">
-                    <img src="../../assets/images/demo-room-img.jpg" alt="room-images">
-                    <button class="round-button" onclick="toggleWishlist(this)"><i class="fa-regular fa-heart"></i></button>
-                    <p class="property-type">PG/Hostel</p>
-                </div>
-                <div class="info">
-                    <div class="card-heading">Santra Mess</div>
-                    <div class="rating">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </div>
-                    <p><i class="fa-solid fa-location-dot"></i> Ramananda Sarani, School Danga, Bankura</p>
-                    <div class="price">₹ 1200 <p>/Month</p></div>
-                    
-                </div>
-                <a href="./room-details.php?id=1"><button class="hero-button">View Details</button></a>
-            </div>
-
+                    HTML;
+                }
+            }
+            ?>
         </div>
     </section>
     <section id="testimonials-section">
@@ -237,15 +192,37 @@ include __DIR__ . '/../../Components/header.php';
             <p>Don't just take our word for it. See what our community has to say about their experience with Rentora.</p>
             <div class="card-holder">
                 <div class="card-2">
-                    <div>15k+</div>
+                    <?php
+                    $sql ="SELECT COUNT(`accommodation_id`) AS acc_count FROM `accommodation`;";
+                    $result = mysqli_query($conn, $sql);
+                    if($result && mysqli_num_rows($result)){
+                        if($row = mysqli_fetch_assoc($result)){
+                            $num = formatNumber($row['acc_count']);
+                            echo<<<HTML
+                            <div>$num</div>
+                            HTML;
+                        }
+                    }
+                    ?>
                     <p>properties Listed</p>
                 </div>
                 <div class="card-2">
-                    <div>98%</div>
+                    <?php
+                    $sql ="SELECT AVG(`rating`) AS `avg_rating` FROM `testimonials` WHERE accomodation_id IS NULL;";
+                    $result = mysqli_query($conn, $sql);
+                    if($result && mysqli_num_rows($result)){
+                        if($row = mysqli_fetch_assoc($result)){
+                            $satisfactionRate = ((($row['avg_rating'])/5)*100);
+                            echo<<<HTML
+                            <div>$satisfactionRate%</div>
+                            HTML;
+                        }
+                    }
+                    ?>
                     <p>Satisfaction Rate</p>
                 </div>
             </div>
-            <button class="btn-primary">Read More Stories</button>
+            <button class="btn-primary" onclick="showReviewForm()" >Write a Review</button>
         </div>
         <div class="slider-wrapper carousel">
             <button class="round-button left-button" onclick="prevSlide()"><i class="fa-solid fa-angle-left"></i></button>
@@ -255,11 +232,168 @@ include __DIR__ . '/../../Components/header.php';
                 <div class="slide">
                     <div class="testimonials-card">
                         <div class="rating">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
+                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        </div>
+                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
+                        <div>
+                            <div class="profile-picture"></div>
+                            <div>
+                                <div>Rakesh Mandal</div>
+                                <p>Property Owner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="testimonials-card">
+                        <div class="rating">
+                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        </div>
+                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
+                        <div>
+                            <div class="profile-picture"></div>
+                            <div>
+                                <div>Rakesh Mandal</div>
+                                <p>Property Owner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="testimonials-card">
+                        <div class="rating">
+                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        </div>
+                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
+                        <div>
+                            <div class="profile-picture"></div>
+                            <div>
+                                <div>Rakesh Mandal</div>
+                                <p>Property Owner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="testimonials-card">
+                        <div class="rating">
+                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        </div>
+                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
+                        <div>
+                            <div class="profile-picture"></div>
+                            <div>
+                                <div>Rakesh Mandal</div>
+                                <p>Property Owner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="testimonials-card">
+                        <div class="rating">
+                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        </div>
+                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
+                        <div>
+                            <div class="profile-picture"></div>
+                            <div>
+                                <div>Rakesh Mandal</div>
+                                <p>Property Owner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="testimonials-card">
+                        <div class="rating">
+                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        </div>
+                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
+                        <div>
+                            <div class="profile-picture"></div>
+                            <div>
+                                <div>Rakesh Mandal</div>
+                                <p>Property Owner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="testimonials-card">
+                        <div class="rating">
+                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        </div>
+                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
+                        <div>
+                            <div class="profile-picture"></div>
+                            <div>
+                                <div>Rakesh Mandal</div>
+                                <p>Property Owner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="testimonials-card">
+                        <div class="rating">
+                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        </div>
+                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
+                        <div>
+                            <div class="profile-picture"></div>
+                            <div>
+                                <div>Rakesh Mandal</div>
+                                <p>Property Owner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="testimonials-card">
+                        <div class="rating">
+                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        </div>
+                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
+                        <div>
+                            <div class="profile-picture"></div>
+                            <div>
+                                <div>Rakesh Mandal</div>
+                                <p>Property Owner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="testimonials-card">
+                        <div class="rating">
+                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        </div>
+                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
+                        <div>
+                            <div class="profile-picture"></div>
+                            <div>
+                                <div>Rakesh Mandal</div>
+                                <p>Property Owner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="testimonials-card">
+                        <div class="rating">
+                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
                         </div>
                         <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
                         <div>
@@ -272,105 +406,7 @@ include __DIR__ . '/../../Components/header.php';
                     </div>
                 </div>
                 
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 
             </div>
         </div>

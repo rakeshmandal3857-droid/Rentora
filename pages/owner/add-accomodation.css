@@ -26,15 +26,49 @@
 .owner-nav li.active{
     background-color: rgba(104, 183, 251, 0.2);
 }
+@media (max-width: 650px) {
+    .owner-nav{
+        min-width: 250px;
+        width: 60vw;
+        top: 0;
+        z-index: 3000;
+        transform: translateX(-500px);
+        transition: all 0.3s ease;
+        padding-top: 70px;
+    }
+    .owner-nav .round-button{
+        display: grid;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+    }
+    .owner-nav.active{
+        transform: translateX(0);
+        left: 0;
+    }
+    .wrapper{
+        width: 100%;
+        margin-left: 0px;
+        padding: 20px;
+    }
+}
+@media (min-width : 649px) {
+    .wrapper{
+        width: calc(100% - 200px);
+        margin-left: 200px;
+        height: 100%;
+        padding: 0 20px 20px 20px;
+    }
+    .owner-nav .round-button{
+        display: none;
+    }
+    .owner-side-bar-button{
+        display: none;
+    }
+}
 .body{
     display: flex;
-    min-height: 60vh;
-}
-.wrapper{
-    width: calc(100% - 200px);
-    margin-left: 200px;
-    height: 100%;
-    padding: 0 20px 20px 20px;
+    min-height: 65vh;
 }
 form{
     width: 100%;
