@@ -134,7 +134,8 @@ video{
         border: none;
         box-shadow: none;
         color: black;
-        margin: 0 auto 60px auto;
+        margin: 0 auto 20px auto;
+        height: fit-content;
     }
     #hero-section form{
         position: relative;
@@ -215,7 +216,7 @@ video{
     grid-template-columns: repeat(4,1fr);
     place-items: center;
     gap: 20px;
-    margin: 40px auto;
+    margin: 40px auto 40px auto;
 }
 .card{
     min-height: 120px;
@@ -285,6 +286,7 @@ video{
 }
 .property-card{
     max-width: 300px;
+    height: max-content;
     min-height: 350px;
     background-color: var(--clean-white);
     border-radius: 10px;

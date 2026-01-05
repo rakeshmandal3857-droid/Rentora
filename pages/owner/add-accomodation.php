@@ -13,7 +13,7 @@ if(isset($_POST['save-accomodation-submit'])){
     $locality = strtoupper(clean($_POST['add-accomodation-locality']));
     $pincode = clean($_POST['add-accomodation-pincode']);
     $googleLink = clean($_POST['add-accomodation-google_link']);
-    $accDesc = strtoupper(clean($_POST['add-accomodation-description']));
+    $accDesc = htmlspecialchars(strip_tags($_POST['add-accomodation-description']));
     $ownerID = $_SESSION['owner']['user_id'] ?? 0;
 
     $selectedAmemites = $_POST['add-accomodation-amenities'] ?? [];
@@ -21,28 +21,35 @@ if(isset($_POST['save-accomodation-submit'])){
     $accAmenities = implode(",", $cleanedAmenities);
 
     $demoName = strtolower(str_replace(" ", "-", $name)) . $ownerID;
-    $uploadsPath = "uploads";
-    
+    $uploadsPath = "./uploads";
+
     if (!is_dir($uploadsPath)) {
         mkdir($uploadsPath, 0777, true);
     }
 
     $imgCount = 0;
-    if(!empty($_FILES['add-accomodation-images']['tmp_name'][0])){
-        foreach ($_FILES['add-accomodation-images']['tmp_name'] as $imgIndex => $tempname){
-            $fileName = $_FILES['add-accomodation-images']['name'][$imgIndex];
+
+    if (!empty($_FILES['add-accomodation-images']['tmp_name'][0])) {
+
+        foreach ($_FILES['add-accomodation-images']['tmp_name'] as $imgIndex => $tempName) {
+
+            $fileName  = $_FILES['add-accomodation-images']['name'][$imgIndex];
             $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-            if($extension !== "jpg"){
+            if ($extension !== "jpg") {
                 echo "<script>alert('Only JPG allowed!');</script>";
                 return;
             }
 
-            $newFileName =  $demoName ."-img-". $imgIndex . "." . "jpg";
-            echo $newFileName;
-            echo $tempName;
-            move_uploaded_file($tempname, "$uploadsPath/$newFileName");
-            $imgCount++;
+            $newFileName = $demoName . "-img-" . $imgIndex . ".jpg";
+            $destination = $uploadsPath . "/" . $newFileName;
+
+            if (move_uploaded_file($tempName, $destination)) {
+                $imgCount++;
+            } else {
+                echo "<script>alert('Image upload failed!');</script>";
+                return;
+            }
         }
     }
 
@@ -69,27 +76,35 @@ if(isset($_POST['save-accomodation-submit'])){
             $extras = isset($room['extras']) ? implode(",", array_map("clean", $room['extras'])) : "";
 
             $imageField = "rooms_image_" . $index;
-            $uploadedImageName = "";
-            if(isset($_FILES[$imageField]) && !empty($_FILES[$imageField]['tmp_name'])){
+            $uploadedImageName = null;
+
+            if (
+                isset($_FILES[$imageField]) &&
+                is_uploaded_file($_FILES[$imageField]['tmp_name'])
+            ) {
                 $fileName = $_FILES[$imageField]['name'];
                 $tempName = $_FILES[$imageField]['tmp_name'];
                 $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-                if($ext !== "jpg"){
+                if (!in_array($ext, ['jpg', 'jpeg'])) {
                     echo "<script>alert('Only JPG images allowed for room!');</script>";
                     return;
                 }
 
-                $roomImgUploadPath = __DIR__ . "/uploads/room";
-                if(!is_dir($roomImgUploadPath)){
+                $roomImgUploadPath = "./uploads/rooms";
+                if (!is_dir($roomImgUploadPath)) {
                     mkdir($roomImgUploadPath, 0777, true);
                 }
 
-                $uploadedImageName = "room-" . $acc_id . "-" . $index . ".jpg";
-                move_uploaded_file($tempName, $roomImgUploadPath . "/" . $uploadedImageName);
+                $uploadedImageName = "room-" . $acc_id . "-" . $index . "-" . uniqid() . ".jpg";
+
+                if (!move_uploaded_file($tempName, $roomImgUploadPath . "/" . $uploadedImageName)) {
+                    echo "<script>alert('Room image upload failed!');</script>";
+                    return;
+                }
             }
 
-            $sqlRoom = "INSERT INTO `rooms` (`accommodation_id`, `owner_id`, `room_size`, `rent`, `bed_count`, `occupied_beds`, `tags`, `extras`, `room_image`) VALUES ('$acc_id', '$ownerID', '$size', '$rent', '$bedCount', '0', '$tags', '$extras', '../../uploads/rooms/');";
+            $sqlRoom = "INSERT INTO `rooms` (`accommodation_id`, `owner_id`, `room_size`, `rent`, `bed_count`, `occupied_beds`, `tags`, `extras`, `room_image`) VALUES ('$acc_id', '$ownerID', '$size', '$rent', '$bedCount', '0', '$tags', '$extras', '$uploadedImageName');";
             $resRoom = mysqli_query($conn, $sqlRoom);
             if(!$resRoom){
                 $_SESSION['status'] = 'error';
@@ -112,7 +127,7 @@ if(isset($_POST['save-accomodation-submit'])){
         <nav class="owner-nav">
             <button class="round-button" onclick="closePopup()"><i class="fa-solid fa-angles-left"></i></button>
             <ul>
-                <a href="./dashboard.php"><li >Dashboard</li></a>
+                <!-- <a href="./dashboard.php"><li >Dashboard</li></a> -->
                 <a href="./view-accomodation.php"><li>View Accomodation</li></a>
                 <a href="./manage-rooms.php"><li>Manage Rooms</li></a>
                 <a href="./add-accomodation.php"><li class="active">Add Accommodation</li></a>
@@ -231,12 +246,11 @@ if(isset($_POST['save-accomodation-submit'])){
                 <h3>Rooms</h3>
                 <div id="roomContainer"></div>
 
-                <button type="button" class="btn-primary" name="add-room-button" onclick="addRoom()">+ Add Room</button>
+                <button type="button" class="btn-primary add_room" name="add-room-button" onclick="addRoom()">+ Add Room</button>
 
                 <br><br>
-                <button type="submit" name="save-accomodation-submit" class="btn">Save Accommodation</button>
-
-            </form>        
+                <button type="submit" name="save-accomodation-submit" class="btn save-acomodation">Save Accommodation</button>
+            </form>
         </div>
     </div>
 

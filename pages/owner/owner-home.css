@@ -1,28 +1,17 @@
 
-.text-input{
-    height: 30px;
-    width: 100%;
-    border-radius: 50px;
-    border: 1px solid rgb(129, 129, 129);
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    background-color: transparent;
-    margin-top: 5px;
-}
-.text-input input{
-    height: 100%;
-}
-.text-input input:focus{
-    outline: none;
-}
-.text-input i{
-    width: 30px;
-    color: rgb(129, 129, 129);
-}
 .hero-section img{
     height: 80vh;
     width: 85vw;
+    border-radius: 16px;
+    margin: auto;
+    filter: blur(1.5px);
+}
+.overlay{
+    height: 80vh;
+    position: absolute;
+    width: 85vw;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 2;
     border-radius: 16px;
     margin: auto;
 }
@@ -34,6 +23,7 @@
 }
 .heroText{
     position: absolute;
+    z-index: 3;
     top: 30%;
     left: 5%;
     display: flex;

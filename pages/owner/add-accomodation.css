@@ -1,3 +1,12 @@
+header{
+    height: 80px;
+}
+nav{
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 .owner-nav{
     height: 100%;
     width: 200px;
@@ -82,7 +91,7 @@ label {
     display: block;
     margin: 5px;
 }
-input, select, textarea {
+.body input,#edit-accomodation-popup input, select, textarea {
     width: 100%;
     padding: 8px;
     border: 1px solid #bbb;

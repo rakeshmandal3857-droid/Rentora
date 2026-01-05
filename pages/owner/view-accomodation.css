@@ -81,6 +81,7 @@
 .delete-accomodation:hover{
     background-color: var(--danger);
 }
+#add-room-popup.active,
 #edit-accomodation-popup.active,
 #delete-confirmation-popup.active{
     right: 50%;
@@ -90,6 +91,7 @@
     height: 100px;
     width: 250px;
 }
+#add-room-popup,
 #edit-accomodation-popup,
 #delete-confirmation-popup{
     right: 50%;
@@ -103,6 +105,7 @@
     align-items: center;
     max-height: 100px;
 }
+#add-room-popup.popup-card,
 #edit-accomodation-popup.popup-card{
     width: max(300px, 60vw);
     overflow: auto;
@@ -110,11 +113,13 @@
     margin-top: 10vh;
     scrollbar-width: none;
 }
+#add-room-popup.popup-card.actice,
 #edit-accomodation-popup.popup-card.actice{
     max-width: max(300px, 60vw);
     max-height: 80vh;
     overflow: auto;
 }
+#add-room-popup .wrapper,
 #edit-accomodation-popup .wrapper{
     width: 100%;
     margin: 0;
@@ -126,6 +131,7 @@
 #delete-confirmation-popup .buttons{
     display: flex;
     gap: 16px;
+    max-height: 35px;
 }
 #delete-confirmation-popup i{
     font-size: var(--h1);
@@ -138,4 +144,25 @@
 #delete-confirmation-popup .heading{
     text-align: center;
 }
-    
+#add-room-popup.popup-card{
+    min-height: fit-content;
+}
+#add-room-popup.popup-card h2{
+    text-align: center;
+}
+#add-room-popup.popup-card form{
+    padding-bottom: 60px;
+}
+#add-room-popup.popup-card button{
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
+
+input{
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    font-size: 14px;
+}

@@ -1,8 +1,6 @@
 <?php
-session_start();
 include __DIR__ . '/owner-header.php';
-// session_unset();
-// session_destroy();
+
 
 if(isset($_SESSION['owner'])){
     echo "<script>window.location.href = '/rentora/pages/owner/add-accomodation.php';</script>";
@@ -12,6 +10,7 @@ if(isset($_SESSION['owner'])){
     <link rel="stylesheet" href="./owner-home.css">
     <div class="hero-section">
         <img src="../../assets/images/building-view-from-sunset.jpg" alt="">
+        <div class="overlay"></div>
 
         <div class="heroText">
             <div class="heading">List Your Property for Free & Boost Your Earnings Instantly</div>

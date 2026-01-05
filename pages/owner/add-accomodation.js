@@ -47,4 +47,16 @@ function addRoom() {
     document.getElementById("roomContainer").innerHTML += html;
 }
 
-
+const saveAccomodationButton = document.querySelector('.save-acomodation');
+if(saveAccomodationButton){
+    let roomCount = 0;
+    saveAccomodationButton.closest('form').querySelector('.add_room').addEventListener('click', ()=>{
+        roomCount ++;
+    })
+    saveAccomodationButton.closest('form').addEventListener('submit',(e)=>{
+        if(roomCount == 0){
+            e.preventDefault();
+            showToastNotification('error', 'Please add a minimum of one room to continue.');
+        }
+    })
+}

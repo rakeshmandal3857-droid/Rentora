@@ -140,7 +140,7 @@ label{
 }
 
 .text-input{
-    min-height: 30px;
+    max-height: 35px;
     width: 100%;
     border-radius: 50px;
     border: 1px solid rgb(129, 129, 129);
@@ -154,7 +154,8 @@ label{
 .text-input select{
     border: none;
     outline: none;
-    width: 100%;
+    width: 90%;
+    height: 90%;
     flex: 1 0;
     font-size: var(--body);
 }
@@ -189,10 +190,10 @@ label{
     font-size: var(--small);
 }
 .stars-bg {
-    color: #ddd; /* gray */
+    color: #ddd;
 }
 .stars-fill {
-    color: #f5c518; /* yellow */
+    color: #f5c518;
     position: absolute;
     top: 0;
     left: 0;

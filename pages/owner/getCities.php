@@ -11,6 +11,6 @@ while($row = mysqli_fetch_assoc($result)){
     $cityData[] = $row;
 }
 
-header("Content-Type: aplication/json");
+header("Content-Type: application/json");
 echo json_encode($cityData);
 ?>

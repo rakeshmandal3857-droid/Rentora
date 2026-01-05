@@ -1,8 +1,6 @@
 <?php
 session_start();
 include __DIR__ . '/../../config-db.php';
-// session_unset();
-// session_destroy();
 ?>
 
 <!DOCTYPE html>
@@ -19,17 +17,18 @@ include __DIR__ . '/../../config-db.php';
 </head>
 <body>
     <header>
-        <section class="header_offer_section">Book your bed/room directly with us and get flat 10% OFF.</section>
+        <!-- <section class="header_offer_section">Book your bed/room directly with us and get flat 10% OFF.</section> -->
 
         <nav><a href="home.php"><div class="logo"><img src="../../assets/images/rentora-logo.png" alt="logo">Rentora</div></a>
             
-            
-            <section class="header-mid">
-                <a class="active" href="home.php">Home</a>
-                <a href="../owner/owner-home.php" target="_blank" id="owner-login-button">List your Property</a>
-                <a href="./aboutUs.php">About Us</a>
-                <a href="#footer">Contact</a>
-            </section>
+            <div class="overlay">
+                <section class="header-mid">
+                    <a id="home" class="active" href="home.php">Home</a>
+                    <a href="../owner/owner-home.php" id="owner-login-button">List your Property</a>
+                    <a id="about-us" href="./aboutUs.php">About Us</a>
+                    <a id="contact" href="#footer">Contact</a>
+                </section>
+            </div>
     
             <section class="header-right">
                 <button class="round-button" id="menu-button"><i class="fa-solid icon fa-list"></i></button>
@@ -40,10 +39,13 @@ include __DIR__ . '/../../config-db.php';
                     <button class="btn-primary" id="login-button">Log in / Sign up</button>
                     HTML;
                 }else{
+                    $profilePhoto = $_SESSION['tenant']['img_path'];
                     echo <<<HTML
                     <!-- <button class="round-button" id="massages-button"> <i class="fa-brands icon fa-facebook-messenger"></i></i></button>
                     <button class="round-button" id="notification-button"><i class="fa-solid icon fa-bell"></i></button> -->
-                    <form action="" method="post"><button class="round-button" name="logout-button" type="submit"><i class="fa-solid fa-right-from-bracket"></i></button></form>
+                    <div class="profile-picture" onclick = "showPofilePopup()">
+                        <img src="$profilePhoto" alt="profile-picture">
+                    </div>
                     HTML;
                 }
                 ?>
@@ -61,7 +63,7 @@ include __DIR__ . '/../../config-db.php';
         unset($_SESSION['tenant']);
         $_SESSION['status'] = 'success';
         $_SESSION['message'] = "Logged out successfully";
-        echo "<script>window.location='home.php';</script>";
+        echo "<script>window.location.href = window.location.href;</script>";
         exit;
     }
     ?>

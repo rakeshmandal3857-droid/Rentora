@@ -101,6 +101,186 @@
     <div class="popup-card" id="delete-confirmation-popup">
        
     </div>
+    <?php
+    if(isset($_SESSION['owner'])){
+        $name   = ucfirst(strtolower($_SESSION['owner']['name']));
+        $mobile = $_SESSION['owner']['mobile'];
+        $email  = $_SESSION['owner']['email'];
+        $img    = $_SESSION['owner']['img_path'];
+        $checkedMale = (($_SESSION['owner']['gender'] ?? '') === 'MALE') ? 'checked' : '';
+        $checkedFeale = (($_SESSION['owner']['gender'] ?? '') === 'FEMALE') ? 'checked' : '';
+        $checkedOther = (($_SESSION['owner']['gender'] ?? '') === 'OTHER') ? 'checked' : '';
+        echo<<<HTML
+        <!-- profile popup  -->
+        <div class="popup-card" id="profile-popup">
+           <div class="popup-card-header">
+                <div class="profile-picture">
+                    <img src="$img" alt="profile-photo">
+                </div>
+                <div class="profile-info">
+                    <div class="name">$name</div>
+                    <p>$mobile</p>
+                </div>
+               <i onclick="closePopup()" class="fa-solid icon fa-circle-xmark"></i>
+           </div> <hr>
+           <div class="container" id="Profile-popup-container">
+               <ul class="profile-card-options">
+                <li onclick="slidePofilePopup('editPesonalData')">
+                    <i class="fa-regular fa-circle-user"></i></i> Edit Personal Data
+                </li>
+                <li onclick="slidePofilePopup('changePassowrd')">
+                    <i class="fa-solid fa-pen-to-square"></i> Change Password
+                </li>
+                <li>
+                    <form action="" method="post"><button class="log-out-button" name="logout-button" type="submit"><i class="fa-solid fa-right-from-bracket"></i> Log out</button></form>
+                </li>
+               </ul>
+               <div class="profile-slide">
+                <div id="changePersonalDataSlide">
+                    <div class="popup-card-header">
+                        <span>Edit Personal data</span>
+                        <i onclick="slideBackProfilePopup()" class="fa-solid fa-circle-left"></i>
+                    </div>
+                    <form action="" method="post">
+                        <label for="owner-edit-user-name">Full Name: 
+                            <div class="text-input">
+                                <i class="fa-solid fa-circle-user"></i>
+                                <input type="text" required name="owner-edit-user-name" id="owner-edit-user-name" value = "$name"  placeholder="Enter your full name">
+                            </div>
+                        </label>
+                        <label for="owner-edit-mobile-number">Mobile Number: 
+                            <div class="text-input">
+                                <i class="fa-solid fa-phone"></i>
+                                <input type="tel" required pattern="[0-9]{10}" id="owner-edit-mobile-number" name="owner-edit-mobile-number" value = "$mobile" placeholder="Enter your mobile number">
+                            </div>
+                        </label>
+                        <label for="owner-edit-email">Email:
+                            <div class="text-input">
+                                <i class="fa-solid fa-envelope"></i>
+                                <input type="email" required name="owner-edit-email" id="owner-edit-email" value = "$email" placeholder="Enter your Email ID">
+                            </div>
+                        </label>
+            
+                           <button type="submit" name="owner-edit-submit" class="hero-button">Save Changes</button>
+                   </form>
+                </div>
+                <div id="changePasswordSlide">
+                    <div class="popup-card-header">
+                        <span>Change Password</span>
+                        <i onclick="slideBackProfilePopup()" class="fa-solid fa-circle-left"></i>
+                    </div>
+                    <form action="" method="post">
+                            <div class="text-input">
+                               <i class="fa-solid fa-key"></i>
+                               <input type="password" required name="owner-old-pass" id="owner-old-pass" placeholder="Enter your old password">
+                               <i onclick="toggleVisibility(this)" class="fa-solid fa-eye-slash"></i>
+                           </div>
+                            <div class="text-input">
+                               <i class="fa-solid fa-key"></i>
+                               <input type="password" required name="owner-change-create-pass" class="owner-create-pass" placeholder="Enter a new password">
+                               <i onclick="toggleVisibility(this)" class="fa-solid fa-eye-slash"></i>
+                           </div>
+                           <div class="text-input">
+                               <i class="fa-solid fa-key"></i>
+                               <input type="password" required name="owner-change-confirm-pass" class="owner-confirm-pass" placeholder="Confirm your new password">
+                               <i onclick="toggleVisibility(this)" class="fa-solid fa-eye-slash"></i>
+                           </div>
+                           <button type="submit" name="change-password-submit" class="hero-button">Change password</button>
+                   </form>
+                </div>
+                </div>
+           </div>
+        </div>
+        HTML;
+    }
+    // change password php code starts from here 
+    if(isset($_POST['change-password-submit'])){
+        $userId = $_SESSION['owner']['user_id'];
+
+        $oldPass = $_POST['owner-old-pass'];
+        $newPass = $_POST['owner-change-create-pass'];
+        $newConfirmPass = $_POST['owner-change-confirm-pass'];
+
+        $sql = "SELECT * FROM `owners` WHERE `user_id` = $userId;";
+        $result = mysqli_query($conn, $sql);
+
+        if($result && mysqli_num_rows($result) == 1){
+            $row = mysqli_fetch_assoc($result);
+
+            if(password_verify($oldPass, $row['pass'])){
+                if($newPass !== $newConfirmPass){
+                    $_SESSION['status'] = 'error';
+                    $_SESSION['message'] = "Your new passwords do not match.";
+                    echo "<script>window.location.href = window.location.href;</script>";
+                    exit;
+                }
+        
+                if(password_verify($newPass, $row['pass'])){
+                    $_SESSION['status'] = 'warning';
+                    $_SESSION['message'] = "Your new password must be different from your current password.";
+                    echo "<script>window.location.href = window.location.href;</script>";
+                    exit;
+                }
+                
+                $newPassHash = password_hash($newPass, PASSWORD_DEFAULT);
+
+                $sql = "UPDATE `owners` SET `pass` = '$newPassHash' WHERE `user_id` = $userId;";
+                if(mysqli_query($conn, $sql)){
+                    $_SESSION['status'] = 'success';
+                    $_SESSION['message'] = "Your password has been changed successfully.";
+                    echo "<script>window.location.href = window.location.href;</script>";
+                    exit;
+                }else{
+                    $_SESSION['status'] = 'error';
+                    $_SESSION['message'] = "Can't change your password. Try again!";
+                    echo "<script>window.location.href = window.location.href;</script>";
+                    exit;
+                }
+                
+            }else{
+                $_SESSION['status'] = 'error';
+                $_SESSION['message'] = "Incorrect password. Please try again.";
+                echo "<script>window.location.href = window.location.href;</script>";
+                exit;
+            }
+        }
+
+
+    }
+
+    // change profile details section 
+    if(isset($_POST['owner-edit-submit'])){
+        $fullName = strtoupper(clean($_POST['owner-edit-user-name']));
+        $mobile = clean($_POST['owner-edit-mobile-number']);
+        $email = clean($_POST['owner-edit-email']);
+        $userId = (int)$_SESSION['owner']['user_id'];
+
+        if($fullName == strtoupper($_SESSION['owner']['name']) && $mobile == $_SESSION['owner']['mobile'] && strtoupper($email) == strtoupper($_SESSION['owner']['email']) && $gender == strtoupper($_SESSION['owner']['gender'])){
+            $_SESSION['status'] = 'warning';
+            $_SESSION['message'] = "Please update at least one personal detail to save changes.";
+            echo "<script>window.location.href = window.location.href;</script>";
+            exit;
+        }
+
+        $sql = "UPDATE `owners` SET `name`= '$fullName',`email`= '$email' ,`mobile`= '$mobile' WHERE `user_id` = $userId";
+        if(mysqli_query($conn, $sql)){
+            $_SESSION['owner']['name'] = ucwords(strtolower($fullName));
+            $_SESSION['owner']['email'] = $email;
+            $_SESSION['owner']['mobile'] = $mobile;
+            
+            $_SESSION['status'] = 'success';
+            $_SESSION['message'] = "Your personal information was updated successfully.";
+            echo "<script>window.location.href = window.location.href;</script>";
+            exit;
+        }else{
+            $_SESSION['status'] = 'error';
+            $_SESSION['message'] = "We couldn’t update your information. Please try again later.";
+            echo "<script>window.location.href = window.location.href;</script>";
+            exit;
+        }
+    }
+
+    ?>
 
     <footer id="footer">
         <section>
@@ -121,10 +301,10 @@
             <div>
                 <div class="heading">Quick Links</div>
                 <ul>
-                    <li><a href="../tenant/home.php">Home</a></li>
+                    <li><a href="../owner/home.php">Home</a></li>
                     <li><a href="./owner-home.php">List Your Property</a></li>
-                    <li><a href="../tenant/aboutUs.php">About US</a></li>
-                    <li><a href="../tenant/home.php#footer">Contact</a></li>
+                    <li><a href="../owner/aboutUs.php">About US</a></li>
+                    <li><a href="../owner/home.php#footer">Contact</a></li>
                 </ul>
             </div>
 
@@ -172,3 +352,7 @@
     ?>
 </body>
 </html>
+
+<?php
+mysqli_close($conn);
+?>

@@ -33,10 +33,14 @@ include __DIR__ . '/../../config-db.php';
                 // <button class="btn-primary" id="login-button">Log in / Sign up</button>
                 // HTML;
             }else{
+                $profilePhoto = $_SESSION['owner']['img_path'];
                 echo <<<HTML
                 <!-- <button class="round-button" id="massages-button"> <i class="fa-brands icon fa-facebook-messenger"></i></i></button>
                 <button class="round-button" id="notification-button"><i class="fa-solid icon fa-bell"></i></button> -->
-                <form action="" method="post"><button class="round-button" name="logout-button" type="submit"><i class="fa-solid fa-right-from-bracket"></i></button></form>
+                <div class="profile-picture" onclick = "showPofilePopup()">
+                    <img src="$profilePhoto" alt="profile-picture">
+                </div>
+                <!-- <form action="" method="post"><button class="round-button" name="logout-button" type="submit"><i class="fa-solid fa-right-from-bracket"></i></button></form> -->
                 HTML;
             }
             ?>

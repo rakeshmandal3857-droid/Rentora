@@ -9,7 +9,9 @@ $result = mysqli_query($conn, $sql);
 $data = [];
 
 while ($row = mysqli_fetch_assoc($result)) {
+    $rooms = [];
     $accId = intval($row['accommodation_id']);
+    $ownerID = $id;
     $name = ucwords(strtolower($row['accommodation_name']));
     $acctype = ucwords(strtolower($row['accommodation_type']));
     $add = ucwords(strtolower($row['street_address'])) . ", " . ucwords(strtolower($row['locality'])) . ", " . ucwords(strtolower($row['location'])) . ", " . $row['pincode'];
@@ -67,7 +69,8 @@ while ($row = mysqli_fetch_assoc($result)) {
         "location" => $location,
         "locality" => $locality,
         "pincode" => $pincode,
-        "accFor" => $accFor
+        "accFor" => $accFor,
+        "ownerId" => $ownerID
     ];
 
 }

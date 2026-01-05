@@ -6,7 +6,7 @@ let prev = accomodationNav.children[0];
 
 accomodationNav.addEventListener('click', (e)=>{
     let li = e.target.closest('li');
-    if(li){
+    if(li && li !== prev){
         li.classList.add('active')
         prev.classList.remove('active');
         prev = li;
@@ -39,9 +39,10 @@ function updateAccomodation(accid){
     accData.forEach(acc => {
         if(acc.accommodation_id === accid){
             let imagesHTML = '' ;
-            for (let i = 1; i <= acc.img_count; i++) {
+            for (let i = 0; i < acc.img_count; i++) {
+                let img  = acc.accommodation_name.toLowerCase().replace(/\s+/g, "-") + acc.ownerId + "-img-" + i + ".jpg";
               imagesHTML += `
-                <img src="../../assets/images/demo-room-img.jpg" alt="room image">
+                <img src="../owner/uploads/${img}" alt="room image">
               `;
             }
             let sectionHTML =`
@@ -86,7 +87,7 @@ function updateAccomodation(accid){
                     </div>
 
                     <div class="button-wrapper">
-                        <button class="btn-primary edit-accomodation" onclick = "showEditAccomodationPopup(${acc.accommodation_id})">Edit Accomodation</button>
+                        <!-- <button class="btn-primary edit-accomodation" onclick = "showEditAccomodationPopup(${acc.accommodation_id})">Edit Accomodation</button> -->
                         <button onclick = "showDeletePopup('accomodation',${acc.accommodation_id})" class="btn-primary delete-accomodation">Delete Accommodation</button>
                     </div>
             `
@@ -104,7 +105,6 @@ function updateAccomodation(accid){
                                             <div class="room-tags">
                                                 <span><i class="fa-solid fa-bed"></i> ${room.bedCount} Beds</span>
                                             </div>
-                                            <p class="room-update">*Only one bed is available</p>
                                         </div>
 
                                         <div class="price">
@@ -117,134 +117,190 @@ function updateAccomodation(accid){
                                             <p>(per bed/month)</p>
                                         </div>
                                     </div>
-                                    <img src="../../assets/images/demo-room-img.jpg" alt="room-img">
+                                    <img src="../owner/uploads/rooms/${room.roomImage}" alt="room-img">
                                 </li>
                                 <div class="button-wrapper">
-                                    <button class="btn-primary edit-accomodation">Edit Room</button>
+                                    <!-- <button class="btn-primary edit-accomodation">Edit Room</button> -->
                                     <button onclick="showDeletePopup('rooms', ${ room.roomID})" class="btn-primary delete-accomodation">Delete Room</button>
                                 </div>
                             </div>`
-                            roomCount++;
-                            roomsSectionHTML += roomHTML;
+                roomCount++;
+                roomsSectionHTML += roomHTML;
             }) 
             accomodationCard.innerHTML = sectionHTML;
             roomUl.innerHTML = roomsSectionHTML;
+            const existingBtn = document.querySelector('.add-accomodation');
+            if (existingBtn) existingBtn.remove();
+            const addRoombutton = document.createElement('button');
+            addRoombutton.classList = "btn-primary add-accomodation"
+            addRoombutton.textContent = 'Add Another Room'
+            addRoombutton.value = accid;
+            roomUl.after(addRoombutton)
         }
     });
+    const existingBtn = document.querySelector('.add-accomodation');
+    const addRoomPopup = document.getElementById("add-room-popup");
+    if (existingBtn){
+        existingBtn.addEventListener('click', ()=>{
+            popupBackgrund.classList.add('active');
+            openedPopup = addRoomPopup;
+            addRoomPopup.innerHTML = `
+            <form action="" method="post">
+            <h2>Add Another Room</h2>
 
+            <label>Room Size (sqft)</label>
+            <input type="number" name="size" required>
+
+            <label>Rent</label>
+            <input type="number" name="rent" required>
+            
+            <label>Bed Count</label>
+            <input type="number" name="bed_count" required>
+
+            <div class="form-group">
+                <label>Tags</label><br>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="tags[]" value="Attached Bathroom"> Attached Bathroom</label>
+                    <label><input type="checkbox" name="tags[]" value="AC Room"> AC Room</label>
+                    <label><input type="checkbox" name="tags[]" value="Fully Furnished"> Fully Furnished</label>
+                    <label><input type="checkbox" name="tags[]" value="Partially Furnished"> Partially Furnished</label>
+                    <label><input type="checkbox" name="tags[]" value="Unfurnished"> Unfurnished</label>
+                    <label><input type="checkbox" name="tags[]" value="With Kitchen"> With Kitchen</label>
+                    <label><input type="checkbox" name="tags[]" value="Without Kitchen"> Without Kitchen</label>
+                    <label><input type="checkbox" name="tags[]" value="Study Table"> Study Table</label>
+                    <label><input type="checkbox" name="tags[]" value="Wardrobe"> Wardrobe</label>
+                    <label><input type="checkbox" name="tags[]" value="Balcony"> Balcony</label>
+                </div>
+            </div>
+
+            <label>Extra Bills</label><br>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="extras[]" value="Electricity"> Electricity</label>
+                <label><input type="checkbox" name="extras[]" value="Wifi"> Wifi</label>
+                <label><input type="checkbox" name="extras[]" value="Water"> Water</label>
+            </div>
+
+            <label>Room Image</label>
+            <input type="file" name="room_image" required>
+            <button type="submit" name="save-room-submit" value="${accid}" class="btn">Save Room</button>
+       </form>`
+            addRoomPopup.classList.add('active');
+        })
+    }
 }
 
-function updateEditAccomodationpopup(id){
-    accData.forEach(acc => {
-        if(acc.accommodation_id === id){
-            console.log(acc);
-            editAccomodationPopup.innerHTML = `
-                    <h2>Edit Accomodation</h2>
+// function updateEditAccomodationpopup(id){
+//     accData.forEach(acc => {
+//         if(acc.accommodation_id === id){
+//             console.log(acc);
+//             editAccomodationPopup.innerHTML = `
+//                     <h2>Edit Accomodation</h2>
         
-                    <form action="" method="POST" enctype="multipart/form-data">
+//                     <form action="" method="POST" enctype="multipart/form-data">
         
-                        <div class="form-group">
-                            <label>Accommodation Name</label>
-                            <input type="text" name="add-accomodation-name" value="${acc.accommodation_name}" required>
-                        </div>
+//                         <div class="form-group">
+//                             <label>Accommodation Name</label>
+//                             <input type="text" name="add-accomodation-name" value="${acc.accommodation_name}" required>
+//                         </div>
         
-                        <div class="form-group">
-                            <label>Accommodation Type</label>
-                            <select name="add-accomodation-acc-type" value="${(acc.accommodation_type).toUpperCase()}" required>
-                                <option value="Hostel/PG">Hostel/PG</option>
-                                <option value="Apartment">Apartment</option>
-                                <option value="House">House</option>
-                            </select>
-                        </div>
+//                         <div class="form-group">
+//                             <label>Accommodation Type</label>
+//                             <select name="add-accomodation-acc-type" value="${(acc.accommodation_type).toUpperCase()}" required>
+//                                 <option value="Hostel/PG">Hostel/PG</option>
+//                                 <option value="Apartment">Apartment</option>
+//                                 <option value="House">House</option>
+//                             </select>
+//                         </div>
                         
-                        <div class="form-group">
-                            <label>Accommodation For:</label>
-                            <div class="options">
-                                <label><input type="radio" name="add-accomodation-accommodation_for" value="Boys Students"> Boys Students</label>
-                                <label><input type="radio" name="add-accomodation-accommodation_for" value="Girls Students"> Girls Students</label>
-                                <label><input type="radio" name="add-accomodation-accommodation_for" value="Male Working Professionals"> Male Working Professionals</label>
-                                <label><input type="radio" name="add-accomodation-accommodation_for" value="Female Working Professionals"> Female Working Professionals</label>
-                                <label><input type="radio" name="add-accomodation-accommodation_for" value="Family"> Family</label>
-                                <label><input type="radio" name="add-accomodation-accommodation_for" value="Anyone"> Anyone</label>
-                                <label><input type="radio" name="add-accomodation-accommodation_for" value="Not Specified"> Not Specified</label>
-                            </div>
-                        </div>
+//                         <div class="form-group">
+//                             <label>Accommodation For:</label>
+//                             <div class="options">
+//                                 <label><input type="radio" name="add-accomodation-accommodation_for" value="Boys Students"> Boys Students</label>
+//                                 <label><input type="radio" name="add-accomodation-accommodation_for" value="Girls Students"> Girls Students</label>
+//                                 <label><input type="radio" name="add-accomodation-accommodation_for" value="Male Working Professionals"> Male Working Professionals</label>
+//                                 <label><input type="radio" name="add-accomodation-accommodation_for" value="Female Working Professionals"> Female Working Professionals</label>
+//                                 <label><input type="radio" name="add-accomodation-accommodation_for" value="Family"> Family</label>
+//                                 <label><input type="radio" name="add-accomodation-accommodation_for" value="Anyone"> Anyone</label>
+//                                 <label><input type="radio" name="add-accomodation-accommodation_for" value="Not Specified"> Not Specified</label>
+//                             </div>
+//                         </div>
                         
-                        <div class="form-group">
-                            <label>Street Address</label>
-                            <input type="text" name="add-accomodation-street-add"  value="${(acc.streetAdd)}" required>
-                        </div>
+//                         <div class="form-group">
+//                             <label>Street Address</label>
+//                             <input type="text" name="add-accomodation-street-add"  value="${(acc.streetAdd)}" required>
+//                         </div>
         
-                        <div class="form-group">
-                            <label>location(City)</label>
-                            <select name="add-accomodation-location" class="add-accomodation-cities" value="${acc.location}" required>
-                            </select>
-                        </div>
+//                         <div class="form-group">
+//                             <label>location(City)</label>
+//                             <select name="add-accomodation-location" class="add-accomodation-cities" value="${acc.location}" required>
+//                             </select>
+//                         </div>
         
-                        <div class="form-group">
-                            <label>Locality</label>
-                            <select name="add-accomodation-locality" class="select-localities" value="${acc.locality}" required>
-                                <option value="school Danga">School Danga</option>
-                            </select>
-                        </div>
+//                         <div class="form-group">
+//                             <label>Locality</label>
+//                             <select name="add-accomodation-locality" class="select-localities" value="${acc.locality}" required>
+//                                 <option value="school Danga">School Danga</option>
+//                             </select>
+//                         </div>
         
-                        <div class="form-group">
-                            <label>Pincode</label>
-                            <input type="text" pattern="[0-9]{6}" name="add-accomodation-pincode" value="${acc.pincode}" required>
-                        </div>
+//                         <div class="form-group">
+//                             <label>Pincode</label>
+//                             <input type="text" pattern="[0-9]{6}" name="add-accomodation-pincode" value="${acc.pincode}" required>
+//                         </div>
                         
-                        <div class="form-group">
-                            <label>Google Map Link</label>
-                            <input type="url" name="add-accomodation-google_link" value="${acc.google_map_link}">
-                        </div>
+//                         <div class="form-group">
+//                             <label>Google Map Link</label>
+//                             <input type="url" name="add-accomodation-google_link" value="${acc.google_map_link}">
+//                         </div>
         
-                        <div class="form-group">
-                            <label>Description & Rules</label>
-                            <textarea name="add-accomodation-description" rows="4">${acc.accommodation_description}</textarea>
-                        </div>
+//                         <div class="form-group">
+//                             <label>Description & Rules</label>
+//                             <textarea name="add-accomodation-description" rows="4">${acc.accommodation_description}</textarea>
+//                         </div>
         
-                        <div class="form-group">
-                            <label>Amenities</label>
-                            <div class="checkbox-group">
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="High-speed Wi-Fi"> High-speed Wi-Fi</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="24x7 Water Supply"> 24×7 Water Supply</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="RO / Filtered Drinking Water"> RO / Filtered Drinking Water</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Electricity Backup / Inverter"> Electricity Backup / Inverter</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Power Backup"> Power Backup</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Parking"> Parking</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Hot Water (Geyser)"> Hot Water (Geyser)</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Air Conditioning (AC)"> Air Conditioning (AC)</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Ceiling Fan"> Ceiling Fan</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Lift / Elevator"> Lift / Elevator</label>
+//                         <div class="form-group">
+//                             <label>Amenities</label>
+//                             <div class="checkbox-group">
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="High-speed Wi-Fi"> High-speed Wi-Fi</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="24x7 Water Supply"> 24×7 Water Supply</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="RO / Filtered Drinking Water"> RO / Filtered Drinking Water</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Electricity Backup / Inverter"> Electricity Backup / Inverter</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Power Backup"> Power Backup</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Parking"> Parking</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Hot Water (Geyser)"> Hot Water (Geyser)</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Air Conditioning (AC)"> Air Conditioning (AC)</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Ceiling Fan"> Ceiling Fan</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Lift / Elevator"> Lift / Elevator</label>
         
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Daily/Weekly Cleaning"> Daily/Weekly Cleaning</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Laundry Service"> Laundry Service</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Housekeeping Staff"> Housekeeping Staff</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Trash Disposal"> Trash Disposal</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Room Service"> Room Service</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Daily/Weekly Cleaning"> Daily/Weekly Cleaning</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Laundry Service"> Laundry Service</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Housekeeping Staff"> Housekeeping Staff</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Trash Disposal"> Trash Disposal</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Room Service"> Room Service</label>
         
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="CCTV Surveillance"> CCTV Surveillance</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Biometric / Smart Lock Entry"> Biometric / Smart Lock Entry</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Security Guard"> Security Guard</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Fire Safety System"> Fire Safety System</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="CCTV Surveillance"> CCTV Surveillance</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Biometric / Smart Lock Entry"> Biometric / Smart Lock Entry</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Security Guard"> Security Guard</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Fire Safety System"> Fire Safety System</label>
         
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Mess / Meal Service"> Mess / Meal Service</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Community Kitchen"> Community Kitchen</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Mess / Meal Service"> Mess / Meal Service</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Community Kitchen"> Community Kitchen</label>
         
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Common Dining Area"> Common Dining Area</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Common Hall / Lounge"> Common Hall / Lounge</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Gym / Fitness Area"> Gym / Fitness Area</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Rooftop Access"> Rooftop Access</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Garden Area"> Garden Area</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Co-working Space"> Co-working Space</label>
-                                <label><input type="checkbox" name="add-accomodation-amenities[]" value="Guest Allowance Policy"> Guest Allowance Policy</label>
-                            </div>
-                        </div>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Common Dining Area"> Common Dining Area</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Common Hall / Lounge"> Common Hall / Lounge</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Gym / Fitness Area"> Gym / Fitness Area</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Rooftop Access"> Rooftop Access</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Garden Area"> Garden Area</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Co-working Space"> Co-working Space</label>
+//                                 <label><input type="checkbox" name="add-accomodation-amenities[]" value="Guest Allowance Policy"> Guest Allowance Policy</label>
+//                             </div>
+//                         </div>
         
-                        <button type="submit" name="save-accomodation-submit" class="btn">Save Accommodation</button>
+//                         <button type="submit" name="save-accomodation-submit" class="btn">Save Accommodation</button>
         
-                    </form> 
-            `
-        }
-    })
-}
+//                     </form> 
+//             `
+//         }
+//     })
+// }
+

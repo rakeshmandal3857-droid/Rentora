@@ -28,22 +28,22 @@ include __DIR__ . '/../../Components/header.php';
                 <label for="location">Location <i class="fa-solid fa-caret-down"></i>
                     <div class="text-input">
                         <i class="fa-solid fa-location-dot"></i>
-                        <input type="text" name="location" id="location" placeholder="Location">
+                        <input type="text" name="location" id="location" required placeholder="Location">
                     </div>
                 </label>
                 <label for="locality">Locality <i class="fa-solid fa-caret-down"></i>
                     <div class="text-input">
                         <i class="fa-solid fa-location-dot"></i>
-                        <select name="locality" class="select-localities" id="locality">
-                            
+                        <select name="locality" class="select-localities" required id="locality">
+                            <option value="ALL">All</option>
                         </select>
                     </div>
                 </label>
                 <label for="acomodation-type">Acomodation Type <i class="fa-solid fa-caret-down"></i>
                     <div class="text-input">
                         <i class="fa-solid fa-house-chimney"></i>
-                        <select name="acomodation-type" id="acomodation-type">
-                            <option value="All">All</option>
+                        <select name="acomodation-type" required id="acomodation-type">
+                            <option value="ALL">All</option>
                             <option value="Hostel/PG">Hostel/PG</option>
                             <option value="Apartment">Apartment</option>
                             <option value="House">House</option>
@@ -67,10 +67,12 @@ include __DIR__ . '/../../Components/header.php';
                         while($row = mysqli_fetch_assoc($result)){
                             $cityName = ucfirst(strtolower($row['city_name']));
                         echo <<<HTML
-                        <div class="city-card" id = "city-id-{$row['city_id']}">
-                            <img src="{$row['city_img_path']}" alt="city name">
-                            <div class="card-heading"> $cityName</div>
-                        </div>
+                        <a href="./search.php?location=$cityName&locality=All&acomodation-type=All&search-button=">
+                            <div class="city-card" id = "city-id-{$row['city_id']}">
+                                <img src="{$row['city_img_path']}" alt="city name">
+                                <div class="card-heading"> $cityName</div>
+                            </div>
+                        </a>
                         HTML;
                         }
                         ?>
@@ -92,8 +94,8 @@ include __DIR__ . '/../../Components/header.php';
             </div>
             <div class="card">
                 <div class="icon-container"><i class="fa-solid fa-wallet"></i></div>
-                <div class="card-heading">Secure Payments</div>
-                <p>Integrated payment gateway for rent and deposits ensuring safety for both parties.</p>
+                <div class="card-heading">Detailed Property Profiles</div>
+                <p>High-quality photos, amenities, rules, and full descriptions to help you make informed decisions.</p>
             </div>
             <div class="card">
                 <div class="icon-container"><i class="fa-solid fa-shield-halved"></i></div>
@@ -102,8 +104,8 @@ include __DIR__ . '/../../Components/header.php';
             </div>
             <div class="card">
                 <div class="icon-container"><i class="fa-solid fa-file-invoice"></i></div>
-                <div class="card-heading">Automated Monthly Bills</div>
-                <p>Automatically generated monthly bills with clear breakdowns and easy transaction history access.</p>
+                <div class="card-heading"> Real User Reviews</div>
+                <p>Read honest reviews from previous tenants to better understand the living experience.</p>
             </div>
         </div>
 
@@ -127,14 +129,14 @@ include __DIR__ . '/../../Components/header.php';
                     <div class="round-button">2</div>
                     <div class="step-info">
                         <div class="card-heading">Connect & Visit</div>
-                        <p>Chat directly with owners and schedule visits at your convenience.</p>
+                        <p>Call property owners directly to schedule visits at your convenience.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="round-button">3</div>
                     <div class="step-info">
                         <div class="card-heading">Move In</div>
-                        <p>Sign digital contracts, pay securely, and get the keys to your new home.</p>
+                        <p>Finalize the agreement offline and move into your new home without any hassle.</p>
                     </div>
                 </div>
             </div>
@@ -144,7 +146,7 @@ include __DIR__ . '/../../Components/header.php';
     <section id="featured-properties">
         <div class="section-heading">Featured Properties</div>
         <div class="desc">Handpicked properties for you.</div>
-        <div class="featured-properties-wrapper">
+        <ul class="featured-properties-wrapper">
             <?php
             $sql = "SELECT * FROM `accommodation` GROUP BY `location` LIMIT 4;";
             $result = mysqli_query($conn, $sql);
@@ -154,18 +156,40 @@ include __DIR__ . '/../../Components/header.php';
                     $accType = ucwords(strtolower($row['accommodation_type']));
                     $accName = ucwords(strtolower($row['accommodation_name']));
                     $accAdd = $add = ucwords(strtolower($row['street_address'])) .", " . ucwords(strtolower($row['locality'])) .", " . ucwords(strtolower($row['location']))  .", " . $row['pincode'];
+                    $ownerId = $row['owner_id'];
+                    $imgName = strtolower(str_replace(" ", "-", $accName)) . $ownerId . "-img-0.jpg";
                     echo<<<HTML
-                    <div class="property-card" id ="$id">
+                    <li class="property-card" id ="$id">
                         <div class="img-holder">
-                            <img src="../../assets/images/demo-room-img.jpg" alt="room-images">
-                            <button class="round-button" onclick="toggleWishlist(this)"><i class="fa-regular fa-heart"></i></button>
+                            <img src="../owner/uploads/$imgName" alt="room-images">
+                            <!-- <button class="round-button" onclick="toggleWishlist(this)"><i class="fa-regular fa-heart"></i></button> -->
                             <p class="property-type">$accType</p>
                         </div>
                         <div class="info">
                             <div class="card-heading">$accName</div>
+                    HTML;
+                    $ratingSql = "SELECT `overall` FROM `accomodation_review` WHERE `accommodation_id` = $id;";
+                    $ratingResult = mysqli_query($conn, $ratingSql);
+
+                    $sumOfOverall = 0;
+                    $count = 0;
+                    $avgRatingPercent = 0;
+
+                    if ($ratingResult && mysqli_num_rows($ratingResult) > 0) {
+                        while ($ratingRow = mysqli_fetch_assoc($ratingResult)) {
+                            $sumOfOverall += (float) $ratingRow['overall'];
+                            $count++;
+                        }
+                        if ($sumOfOverall > 0) {
+                            $avgRatingPercent = (($sumOfOverall / $count) / 5) * 100;
+                        }else{
+                            $avgRatingPercent = 0;
+                        }
+                    }
+                    echo<<<HTML
                             <div class="rating">
                                 <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                                <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                                <div class="stars-fill" style="width: $avgRatingPercent%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
                             </div>
                             <p><i class="fa-solid fa-location-dot"></i> $accAdd</p>
                     HTML;
@@ -179,13 +203,14 @@ include __DIR__ . '/../../Components/header.php';
                     echo<<<HTML
                         </div>
                         <a href="./room-details.php?id=$id"><button class="hero-button">View Details</button></a>
-                    </div>
+                    </li>
                     HTML;
                 }
             }
             ?>
-        </div>
+        </ul>
     </section>
+
     <section id="testimonials-section">
         <div>
             <div class="section-heading">Loved by Tenants and Landlords Alike</div>
@@ -208,11 +233,11 @@ include __DIR__ . '/../../Components/header.php';
                 </div>
                 <div class="card-2">
                     <?php
-                    $sql ="SELECT AVG(`rating`) AS `avg_rating` FROM `testimonials` WHERE accomodation_id IS NULL;";
+                    $sql ="SELECT AVG(`rating`) AS `avg_rating` FROM `testimonials`;";
                     $result = mysqli_query($conn, $sql);
                     if($result && mysqli_num_rows($result)){
                         if($row = mysqli_fetch_assoc($result)){
-                            $satisfactionRate = ((($row['avg_rating'])/5)*100);
+                            $satisfactionRate = abs((($row['avg_rating'])/5)*100);
                             echo<<<HTML
                             <div>$satisfactionRate%</div>
                             HTML;
@@ -228,187 +253,62 @@ include __DIR__ . '/../../Components/header.php';
             <button class="round-button left-button" onclick="prevSlide()"><i class="fa-solid fa-angle-left"></i></button>
             <button class="round-button right-button" onclick="nextSlide()"><i class="fa-solid fa-angle-right"></i></button>
 
-            <div class="testimonials-slider">
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="testimonials-card">
-                        <div class="rating">
-                            <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <div class="stars-fill" style="width: 60%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        </div>
-                        <p> <i>"Rentora completely transformed how I manage my properties. The automated rent collection and maintenance tracking saves me hours every week. Highly recommended!"</i> </p>
-                        <div>
-                            <div class="profile-picture"></div>
-                            <div>
-                                <div>Rakesh Mandal</div>
-                                <p>Property Owner</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                
-                
-            </div>
+            <ul class="testimonials-slider">
+                <?php
+                $sql = "SELECT * FROM `testimonials`;";
+                $result = mysqli_query($conn, $sql);
+
+                if($result && mysqli_num_rows($result) > 0){
+                    while($row = mysqli_fetch_assoc($result)){
+                        $writerRole = $row['writer_role'];
+                        $writerID = (int)$row['writer_id'];
+                        $rating = (int)$row['rating'];
+                        if(strlen($row['review']) > 200){
+                            $reviewWords = explode(" " ,$row['review']);
+                            $review = implode(" ", array_slice($reviewWords, 0, 25)) . "...";
+                        }else{
+                            $review = $row['review'];
+                        }
+                        $persentage = (($rating/5)*100);
+                        if($writerRole == "owner"){
+                            $writerSql = "SELECT `name`,`img_path` FROM `owners` WHERE `user_id` = $writerID;";
+                            $writerRole = "Property Owner";
+                        }else{
+                            $writerSql = "SELECT `name`,`img_path` FROM `tenants` WHERE `user_id` = $writerID;";
+                            $writerRole = "User";
+                        }
+
+                        $writerResult = mysqli_query($conn, $writerSql);
+
+                        if($writerResult && mysqli_num_rows($writerResult) == 1){
+                            $writerRow = mysqli_fetch_assoc($writerResult);
+                            $writerName = ucwords(strtolower($writerRow['name']));
+                            $writerImg = $writerRow['img_path'];
+                            echo<<<HTML
+                            <li class="slide">
+                                <div class="testimonials-card">
+                                    <div class="rating">
+                                        <div class="stars-bg"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                                        <div class="stars-fill" style="width: {$persentage}%" ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                                    </div>
+                                    <p> <i>"$review"</i> </p>
+                                    <div>
+                                        <div class="profile-picture">
+                                            <img src="$writerImg" alt="profile-picture">
+                                        </div>
+                                        <div>
+                                            <div>$writerName</div>
+                                            <p>$writerRole</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            HTML;
+                        }
+                    }
+                }
+                ?>
+            </ul>
         </div>
     </section>
 
