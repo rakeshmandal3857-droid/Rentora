@@ -113,27 +113,30 @@ if (isset($_POST['save-room-submit'])) {
     $tags   = isset($_POST['tags']) ? implode(",", array_map("clean", $_POST['tags'])) : "";
     $extras = isset($_POST['extras']) ? implode(",", array_map("clean", $_POST['extras'])) : "";
 
-    $uploadedImageName = "";
+    $uploadedImageName = null;
 
-    if (isset($_FILES['room_image']) && !empty($_FILES['room_image']['tmp_name'])) {
+    if (!empty($_FILES['room_image']['tmp_name'])) {
+        
 
         $fileName = $_FILES['room_image']['name'];
         $tempName = $_FILES['room_image']['tmp_name'];
-        $ext      = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-        if ($ext !== "jpg") {
-            $_SESSION['status']  = 'error';
-            $_SESSION['message'] = "Only JPG images are allowed for rooms.";
-            header("Location: owner-home.php");
-            exit;
+        if ($ext !== 'jpg' && $ext !== 'jpeg') {
+            die('Only JPG images allowed');
         }
 
         $roomImgUploadPath = __DIR__ . "/uploads/rooms";
+
         if (!is_dir($roomImgUploadPath)) {
             mkdir($roomImgUploadPath, 0777, true);
         }
 
-        $uploadedImageName = "room-" . $acc_id . "-" . "image" . ".jpg";
+        $uploadedImageName = "room-" . $acc_id . "-" . uniqid() . ".jpg";
+
+        // var_dump($uploadedImageName);
+        // exit;
+
         move_uploaded_file($tempName, $roomImgUploadPath . "/" . $uploadedImageName);
     }
 

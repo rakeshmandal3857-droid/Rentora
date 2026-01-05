@@ -145,7 +145,7 @@ function updateAccomodation(accid){
             popupBackgrund.classList.add('active');
             openedPopup = addRoomPopup;
             addRoomPopup.innerHTML = `
-            <form action="" method="post">
+            <form action="" method="post" enctype="multipart/form-data">
             <h2>Add Another Room</h2>
 
             <label>Room Size (sqft)</label>

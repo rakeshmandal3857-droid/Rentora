@@ -237,7 +237,7 @@ include __DIR__ . '/../../Components/header.php';
                     $result = mysqli_query($conn, $sql);
                     if($result && mysqli_num_rows($result)){
                         if($row = mysqli_fetch_assoc($result)){
-                            $satisfactionRate = abs((($row['avg_rating'])/5)*100);
+                            $satisfactionRate = round(($row['avg_rating'] / 5) * 100, 0);
                             echo<<<HTML
                             <div>$satisfactionRate%</div>
                             HTML;
